@@ -1,2 +1,2 @@
 # PersonalWebsite
-Code for my personal website at <a>barneyw.net</a>
+Code for my personal website at www.barneyw.net
