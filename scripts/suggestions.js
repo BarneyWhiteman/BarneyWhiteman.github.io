@@ -55,7 +55,7 @@ function load_suggestions(s) {
 
 	} else {
 		for(i = 0; i < suggestions.suggestions.length; i ++) {
-			var html = "<p class=\"card-text\">" + suggestions.suggestions[i].suggestion + "</p><div class=\"form-inline\"><button class=\"btn btn-outline-success\" onclick=\"upvote('" + i + "')\">+</button><button class=\"btn btn-outline-default\" disabled>" + suggestions.suggestions[i].votes + "</button><button class=\"btn btn-outline-danger\" onclick=\"downvote('" + i + "')\">-</button></div>";
+			var html = "<p class=\"card-text\">" + (i + 1) + ". " + suggestions.suggestions[i].suggestion + "</p><div class=\"form-inline\"><button class=\"btn btn-outline-success\" onclick=\"upvote('" + i + "')\">+</button><button class=\"btn btn-outline-default\" disabled>" + suggestions.suggestions[i].votes + "</button><button class=\"btn btn-outline-danger\" onclick=\"downvote('" + i + "')\">-</button></div>";
 			var div = document.createElement("div");
 			
 			div.classList.add("card");

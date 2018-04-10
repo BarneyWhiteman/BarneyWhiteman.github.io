@@ -5,7 +5,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var port = process.env.PORT || 8080;
 var root = __dirname.split('\Server')[0];
-var db = root + "/data/suggestions.json";
+var db = root + "data/suggestions.json";
 var suggestions = {suggestions:[]};
 
 load_suggestions();
