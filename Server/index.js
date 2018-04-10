@@ -6,16 +6,16 @@ var io = require('socket.io')(http);
 var port = process.env.PORT || 8080;
 var root = __dirname.split('\Server')[0];
 var db = root + "/data/suggestions.json";
-var suggestions;
+var suggestions = {suggestions:[]};
+
+load_suggestions();
 
 app.use('/scripts', express.static(root + '/scripts'));
 app.use('/', express.static(root));
 //Default page to send when somone connects to the server
 app.get('/', function(req, res){
-  res.sendFile(root + '/index.html');
+  res.sendFile(root + '/youtube.html');
 });
-
-load_suggestions();
 
 // Listen on the connection event for incoming sockets
 // and write to console
@@ -54,29 +54,19 @@ function add_suggestion(msg) {
 
 }
 
-function upvote(msg) {
-    var len = suggestions.suggestions.length;
-    for(i = 0; i < len; i ++) {
-        if(suggestions.suggestions[i].suggestion == msg) {
-            suggestions.suggestions[i].votes = suggestions.suggestions[i].votes + 1;
-            save_suggestions();
-            return;
-        }
-    }
+function upvote(index) {
+    suggestions.suggestions[index].votes = suggestions.suggestions[index].votes + 1;
+    sort();
+    save_suggestions();
 }
 
-function downvote(msg) {
-    var len = suggestions.suggestions.length;
-    for(i = 0; i < len; i ++) {
-        if(suggestions.suggestions[i].suggestion == msg) {
-            suggestions.suggestions[i].votes = suggestions.suggestions[i].votes - 1;
-            if(suggestions.suggestions[i].votes <= 0) {
-                suggestions.suggestions.splice(i, 1);
-            }
-            save_suggestions();
-            return;
-        }
+function downvote(index) {
+    suggestions.suggestions[index].votes = suggestions.suggestions[index].votes - 1;
+    if(suggestions.suggestions[index].votes < 0) {
+        suggestions.suggestions.splice(index, 1);
     }
+    sort();
+    save_suggestions();
 }
 
 function load_suggestions() {
@@ -100,4 +90,10 @@ function clear() {
 
 function send_suggestions() {
     io.sockets.emit('suggestions', suggestions);
+}
+
+function sort() {
+    suggestions.suggestions.sort(function(a, b) {
+        return a.votes < b.votes;
+    });
 }
