@@ -10,10 +10,11 @@
 		<link rel="stylesheet" href="./styles/style.css">
 		<title>Barney - YouTube</title>
 		<link rel="icon" href="./images/icon.png">
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:300" rel="stylesheet">
 	</head>
 
 	<body onload="loaded()">
-		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<div class="navbar navbar-expand bg-dark navbar-dark flex-column flex-md-row bd-navbar">
 		  <!-- Brand -->
 		  <a class="navbar-brand" href="/">Barney Whiteman</a>
 
@@ -23,10 +24,10 @@
 		      	<a class="nav-link" href="/">Home</a>
 		    </li>
 		    <li class="nav-item">
-				<a class="nav-link" href="experience.html">Experience</a>
+				<a class="nav-link" href="About.html">About</a>
 			</li>
 		     <li class="nav-item">
-		      	<a class="nav-link" href="youtube.html">YouTube</a>
+		      	<a class="nav-link active" href="youtube.html">YouTube</a>
 		    </li>
 			
 		    <!-- Dropdown -->
@@ -39,32 +40,30 @@
 		      </div>
 		    </li>
 		  </ul>
-		</nav>
+		</div>
 
 
 	    <div class="container">
 
 	      <div class="jumbotron">
 	        <h1>Barney on YouTube</h1>
+	        <hr class="my-4">
 	        <p>On my <a href="https://www.youtube.com/channel/UCrzKp7Z7PuuuAPXfQnDTdpQ">channel</a> I make videos on coding challenges. These challenges are mostly using the <a href="https://processing.org/">Processing</a> language due to its simple to use nature.</p>
+	        <hr class="my-4">
 	        <h4>Future Challenges</h4>
 	        <p>Vote for topics that you would like to see in future videos.</p>
 	        <p>Don't see a topic that you like? Submit one!</p>
 	        
-	        <div id="suggests">
-        			<input type="text" class="form-control" id="suggestion">
-        			<button type="submit" onclick="send_suggestion()" class="btn btn-outline-primary">Submit Challenge</button>
+	        <div class="input-group mb-3">
+	        	<button type="submit" onclick="send_suggestion()" class="btn btn-outline-primary">Submit Challenge</button>
+    			<textarea class="form-control" id="suggestion"></textarea>    			
 	       	</div>
 	        <br>
 	        <div id="topic_box" class="pre-scrollable"></div>
 
 	      </div>
 
-	      <div class="mastfoot">
-	        <div class="inner">
-	          <p>Website made by Barney Whiteman</p>
-	        </div>
-	      </div>
+</div>
 
 	    </div>
 		

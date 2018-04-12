@@ -16,4 +16,25 @@ a:hover {
 /* selected link */
 a:active {
     text-decoration: none;
+    background-color: #515151;
+}
+
+/* background gradient */
+body {
+	background: linear-gradient(to right, rgb(255, 245, 245), rgb(225, 245, 255));
+	font-family: "Montserrat", sans-serif;
+	line-height: 1.6;
+}
+
+.jumbotron {
+	margin: 0;
+	background-color: transparent;
+}
+
+h1 {
+	text-align: center;
+}
+
+.tick {
+	list-style-image: url(../images/tick-small.png);
 }
