@@ -6,4 +6,5 @@ function send_email() {
 	document.getElementById('body').value = '';
 
 	window.open("mailto:barney@barneyw.net?subject=" + subject + "&body=" + body);
+	window.location = "./thanks.html"
 }
