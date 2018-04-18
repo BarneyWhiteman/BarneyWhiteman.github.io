@@ -6,6 +6,7 @@ var flag_values = [];
 var suggestions;
 
 function loaded() {
+
 	socket.emit('load', "I'm ready for files!");
 }
 
