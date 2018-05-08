@@ -50,8 +50,8 @@ function add_suggestion(msg) {
         suggestion: msg,
         votes: 1
     });
+    sort();
     save_suggestions();
-
 }
 
 function upvote(index) {
