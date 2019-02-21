@@ -3,6 +3,7 @@
     width: 300px;
     overflow: scroll;
     font-size: 110%;
+    font-family: monospace;
     resize:none;
   }
 
