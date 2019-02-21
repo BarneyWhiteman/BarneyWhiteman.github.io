@@ -373,6 +373,7 @@ socket.on('new', function() {
 
 socket.on('log', function(message) {
 	//add message to player log
+	console.log(message);
 	document.getElementById("player_log").innerText = message + "\n" + document.getElementById("player_log").innerHTML;
 });
 

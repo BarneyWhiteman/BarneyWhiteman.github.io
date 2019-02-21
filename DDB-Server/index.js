@@ -4,7 +4,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var config = require('./GameFiles/config.json');
 var port = config.port;
-var root = __dirname.split('\Server')[0]; //Get the base directory for the project
+var root = __dirname.split('\DDB-Server')[0]; //Get the base directory for the project
 
 //directories for use:
 app.use('/JavaScript', express.static(root + '/scripts'));
@@ -14,7 +14,7 @@ app.use('/CSS', express.static(root + '/styles'));
 app.use('/', express.static(root + '/'));
 //Default page to send when somone connects to the server
 app.get('/', function(req, res){
-  res.sendFile(root + '/client.html');
+  res.sendFile('/ddb.html');
 });
 
 //Classes
