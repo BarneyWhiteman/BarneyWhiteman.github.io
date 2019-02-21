@@ -1,0 +1,327 @@
+{
+	"title": "Dominion",
+	"require": "./GameFiles/Dominion/dominion.js",
+    "max_players": 4,
+    "min_players": 2,
+	"draw_size": 5,
+	"victory_type": "points",
+	"default_round_stats": {
+		"action": 1,
+		"buy": 1,
+		"treasure": 0
+	},
+	"stat_types": ["action", "buy", "treasure"],
+	"turn_structure": ["action", "buy", "clear"],
+	"starter_cards": [
+		{
+			"name": "copper",
+			"count": 7
+		},
+		{
+			"name": "chapel",
+			"count": 7
+		},
+		{
+			"name": "estate",
+			"count": 3
+		}
+	],
+	"pools": {
+		"const": [
+			{
+				"name": "Copper", "shuffled": false,
+				"cards": [{
+					"name": "copper", "count": null, "values": {"2": 46, "3": 39, "4": 32}
+				}]
+			},
+			{
+				"name": "Silver", "shuffled": false,
+				"cards": [{
+					"name": "silver", "count": 40
+				}]
+			},
+			{
+				"name": "Gold", "shuffled": false,
+				"cards": [{
+					"name": "gold", "count": 30
+				}]
+			},
+			{
+				"name": "Estate", "shuffled": false,
+				"cards": [{
+					"name": "estate", "count": null, "values": {"2": 8, "3": 12, "4": 12}
+				}]
+			},
+			{
+				"name": "Duchy", "shuffled": false,
+				"cards": [{
+					"name": "duchy", "count": null, "values": {"2": 8, "3": 12, "4": 12}
+				}]
+			},
+			{
+				"name": "Province", "shuffled": false,
+				"cards": [{
+					"name": "province", "count": null, "values": {"2": 8, "3": 12, "4": 12}
+				}]
+			},
+			{
+				"name": "Curse", "shuffled": false,
+				"cards": [{
+					"name": "curse", "count": null, "values": {"2": 10, "3": 20, "4": 30}
+				}]
+			}
+		],
+		"num_random": 10,
+		"random": [
+			{
+				"name": "Cellar", "shuffled": false,
+				"cards": [{
+					"name": "cellar", "count": 10
+				}]
+			},
+			{
+				"name": "Chapel", "shuffled": false,
+				"cards": [{
+					"name": "chapel", "count": 10
+				}]
+			},
+			{
+				"name": "Moat", "shuffled": false,
+				"cards": [{
+					"name": "moat", "count": 10
+				}]
+			},
+			{
+				"name": "Chancellor", "shuffled": false,
+				"cards": [{
+					"name": "chancellor", "count": 10
+				}]
+			},
+			{
+				"name": "Village", "shuffled": false,
+				"cards": [{
+					"name": "village", "count": 10
+				}]
+			},
+			{
+				"name": "Woodcutter", "shuffled": false,
+				"cards": [{
+					"name": "woodcutter", "count": 10
+				}]
+			},
+			{
+				"name": "Workshop", "shuffled": false,
+				"cards": [{
+					"name": "workshop", "count": 10
+				}]
+			},
+			{
+				"name": "Feast", "shuffled": false,
+				"cards": [{
+					"name": "feast", "count": 10
+				}]
+			},
+			{
+				"name": "Militia", "shuffled": false,
+				"cards": [{
+					"name": "militia", "count": 10
+				}]
+			},
+			{
+				"name": "Moneylender", "shuffled": false,
+				"cards": [{
+					"name": "moneylender", "count": 10
+				}]
+			},
+			{
+				"name": "Remodel", "shuffled": false,
+				"cards": [{
+					"name": "remodel", "count": 10
+				}]
+			},
+			{
+				"name": "Bureaucrat", "shuffled": false,
+				"cards": [{
+					"name": "bureaucrat", "count": 10
+				}]
+			},
+			{
+				"name": "Smithy", "shuffled": false,
+				"cards": [{
+					"name": "smithy", "count": 10
+				}]
+			},
+			{
+				"name": "Gardens", "shuffled": false,
+				"cards": [{
+					"name": "gardens", "count": 10
+				}]
+			},
+			{
+				"name": "Council Room", "shuffled": false,
+				"cards": [{
+					"name": "councilroom", "count": 10
+				}]
+			},
+			{
+				"name": "Festival", "shuffled": false,
+				"cards": [{
+					"name": "festival", "count": 10
+				}]
+			},
+			{
+				"name": "Laboratory", "shuffled": false,
+				"cards": [{
+					"name": "laboratory", "count": 10
+				}]
+			},
+			{
+				"name": "Market", "shuffled": false,
+				"cards": [{
+					"name": "market", "count": 10
+				}]
+			},
+			{
+				"name": "Mine", "shuffled": false,
+				"cards": [{
+					"name": "mine", "count": 10
+				}]
+			},
+			{
+				"name": "Witch", "shuffled": false,
+				"cards": [{
+					"name": "witch", "count": 10
+				}]
+			}
+		]
+	},
+	"all_cards": {
+		"copper": {
+			"name": "Copper", "type": "currency", "cost": 0, "currency": "treasure", "stats": {"treasure": 1},
+			"desc": "1 Treasure"
+        },
+        "silver": {
+			"name": "Silver", "type": "currency", "cost": 3, "currency": "treasure", "stats": {"treasure": 2},
+			"desc": "2 Treasure"
+        },
+        "gold": {
+			"name": "Gold", "type": "currency", "cost": 6, "currency": "treasure", "stats": { "treasure": 3},
+			"desc": "3 Treasure"
+        },
+
+
+        "estate": {
+			"name": "Estate", "type": "victory", "cost": 2, "currency": "treasure", "stats": {"points": 1},
+			"desc": "1 Point"
+        },
+        "duchy": {
+			"name": "Duchy", "type": "victory", "cost": 5, "currency": "treasure", "stats": {"points": 3},
+			"desc": "3 Points"
+        },
+        "province": {
+			"name": "Province", "type": "victory", "cost": 8, "currency": "treasure", "stats": {"points": 6},
+			"desc": "6 Points"
+        },
+        "curse": {
+			"name": "Curse", "type": "curse", "cost": 0, "currency": "treasure", "stats": {"points": -1},
+			 "desc": "-1 Point"
+		},
+		
+
+        "cellar": {
+			"name": "Cellar", "type": "action", "cost": 2, "currency": "treasure", "stats": {"action": 1}, "function": "cellar",
+			"desc": "+1 Action\nDiscard any number of cards.\n+1 Card per card discarded"
+        },
+        "chapel": {
+			"name": "Chapel", "type": "action", "cost": 2, "currency": "treasure", "stats": {"trash": [0, 4]},
+			"desc": "Trash up to 4 cards from your hand"
+        },
+        "moat": {
+			"name": "Moat", "type": "action-reaction", "cost": 2, "currency": "treasure", "stats": {"card": 2},
+			"desc": "+2 Cards\nWhen another player plays an Attack card, you may reveal this from your hand. If you do, you are unaffected by that Attack"
+		},
+		
+
+        "workshop": {
+			"name": "Workshop", "type": "action", "cost": 3, "currency": "treasure", "stats": {"add_card": [4, "treasure"]},
+			"desc": "Gain a card costing up to 4 Treasure"
+        },
+        "chancellor": {
+			"name": "Chancellor", "type": "action", "cost": 3, "currency": "treasure", "stats": {"treasure": 2}, "function": "chancellor",
+			"desc": "+2 Treasure\nYou may immediately put your deck in your discard pile"
+        },
+        "village": {
+			"name": "Village", "type": "action", "cost": 3, "currency": "treasure", "stats": {"action": 2, "card": 1},
+			"desc": "+1 Card\n+2 Actions"
+        },
+        "woodcutter": {
+			"name": "Woodcutter", "type": "action", "cost": 3, "currency": "treasure", "stats": {"treasure": 2, "buy": 1},
+			"desc": "+1 Buy\n+2 Treasure"
+		},
+		
+
+        "feast": {
+			"name": "Feast", "type": "action", "cost": 4, "currency": "treasure", "stats": {"add_card": [5, "treasure"]}, "function": "feast",
+			"desc": "Trash this card\nGain a card costing up to 5 Treasure"
+        },
+        "militia": {
+			"name": "Militia", "type": "action-attack", "cost": 4, "currency": "treasure", "stats": {"treasure": 2}, "function": "militia",
+			"desc": "+2 Treasure\n Each other player discards down to 3 cards in their hand"
+        },
+        "moneylender": {
+			"name": "Moneylender", "type": "action", "cost": 4, "currency": "treasure", "stats": {}, "function": "moneylender",
+			"desc": "Trash a copper from your hand\nIf you do: +3 Treasure"
+        },
+        "remodel": {
+			"name": "Remodel", "type": "action", "cost": 4, "currency": "treasure", "stats": {"trash": [0, 1]}, "function": "remodel",
+			"desc": "Trash a card from your hand\nGain a card up to 2 Treasure more than the trashed card"
+        },
+        "bureaucrat": {
+			"name": "Bureaucrat", "type": "action-attack", "cost": 4, "currency": "treasure", "stats": {}, "function": "bureaucrat",
+			"desc": "Gain a Silver card, put it on top of your deck. Each other player reveals a Victory card from their hand and puts it on their deck (or reveals a hand with no Victory cards)."
+        },
+        "smithy": {
+			"name": "Smithy", "type": "action", "cost": 4, "currency": "treasure", "stats": {"card": 3},
+			"desc": "+3 Cards"
+        },
+        "gardens": {
+			"name": "Gardens", "type": "victory", "cost": 4, "currency": "treasure", "stats": {}, "function": "gardens",
+			"desc": "Worth 1 Point for every 10 cards in your deck (rounded down)"
+		},
+
+		
+	    "councilroom": {
+			"name": "Council Room", "type": "action", "cost": 5, "currency": "treasure", "stats": {"card": 4, "buy": 1}, "function": "council_room",
+			"desc": "+4 Cards\n+1 Buy\nEach other player draws a card"
+        },
+        "festival": {
+			"name": "Festival", "type": "action", "cost": 5, "currency": "treasure", "stats": {"action": 2, "buy": 1, "treasure": 2},
+			"desc": "+2 Actions\n+1 Buy\n+2 Treasure"
+        },
+        "laboratory": {
+			"name": "Laboratory", "type": "action", "cost": 5, "currency": "treasure", "stats": {"card": 2, "action": 1},
+			"desc": "+2 Cards\n+1 Action"
+		},
+        "market": {
+			"name": "Market", "type": "action", "cost": 5, "currency": "treasure", "stats": {"card": 1, "action": 1, "buy": 1, "treasure": 1},
+			"desc": "+1 Card\n+1 Action\n+1 Buy\n+1 Treasure"
+        },
+        "mine": {
+			"name": "Mine", "type": "action", "cost": 5, "currency": "treasure", "stats": {}, "function": "mine",
+			"desc": "Trash a Treasure card from your hand. Gain a Treasure card costing up to 3 Treasure more; put it into your hand."
+        },
+        "witch": {
+			"name": "Witch", "type": "action-attack", "cost": 5, "currency": "treasure", "stats": {"card": 2}, "function": "witch",
+			"desc": "+2 Cards\nEach other player gains a Curse card"
+		}
+	},
+	"colours": {
+		"currency": [250, 200, 0],
+		"victory": [0, 250, 50],
+		"curse": [250, 0, 250],
+		"action": [200, 200, 200],
+		"action-attack": [200, 200, 200],
+		"action-reaction": [0, 200, 250],
+		"default": [200, 200, 200]
+	}
+}

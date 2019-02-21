@@ -13,9 +13,7 @@ load_suggestions();
 app.use('/scripts', express.static(root + '/scripts'));
 app.use('/', express.static(root));
 //Default page to send when somone connects to the server
-app.get('/', function(req, res){
-  res.sendFile(root + '/youtube.html');
-});
+
 
 // Listen on the connection event for incoming sockets
 // and write to console

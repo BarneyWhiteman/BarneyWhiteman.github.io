@@ -1,0 +1,9 @@
+{
+	"port": 8000,
+
+	"games": {
+		"Dominion": "./GameFiles/Dominion/dominion.json", 
+		"Caveman" : "./GameFiles/Caveman/caveman.json",
+		"Ascension:VotA": "./GameFiles/Ascension/ascension.json"
+	}
+}
