@@ -14,7 +14,7 @@ app.use('/CSS', express.static(root + '/styles'));
 app.use('/', express.static(root + '/'));
 //Default page to send when somone connects to the server
 app.get('/', function(req, res){
-  res.sendFile('/ddb.html');
+  res.sendFile(root + '/ddb.html');
 });
 
 //Classes

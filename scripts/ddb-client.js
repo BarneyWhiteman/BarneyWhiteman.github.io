@@ -43,6 +43,8 @@ var unexpected_over = false; //if people leave the game;
 var paused = false;
 var open_games = false;
 
+var log_text = "";
+
 var text_lrg = 30;
 var text_med = 25;
 var text_sml = 15;
@@ -368,13 +370,15 @@ socket.on('new', function() {
 	ready = false;
 	over = false;
 	unexpected_over = false;
+	log_text = "";
 	document.getElementById("player_log").innerText = "";
 });
 
 socket.on('log', function(message) {
 	//add message to player log
 	console.log(message);
-	document.getElementById("player_log").innerText = message + "\n" + document.getElementById("player_log").innerHTML;
+	log_text += message + "\n";
+	document.getElementById("player_log").innerText = log_text;
 });
 
 socket.on('hand', function(cards) {

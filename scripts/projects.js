@@ -17,7 +17,6 @@ var projects = [{"name": "Lissajous Curve", "url": "merryforsakenalbacoretuna"},
 function loadGifs() {
 	var gifs = document.getElementById("gifs");
 	for(i in projects) {
-		console.log(projects[i]);
 		gifs.innerHTML += "<h2>" + projects[i]["name"] + "</h2>";
 		if(projects[i]["github"] != null) {
 			gifs.innerHTML += "<a href=\"" + projects[i]["github"] + "\">GitHub</a>";
