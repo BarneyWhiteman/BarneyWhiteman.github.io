@@ -368,12 +368,12 @@ socket.on('new', function() {
 	ready = false;
 	over = false;
 	unexpected_over = false;
-	document.getElementById("player_log").innerText = "";
+	document.getElementById("player_log").textContent = "";
 });
 
 socket.on('log', function(message) {
 	//add message to player log
-	document.getElementById("player_log").innerText = message + "\n" + document.getElementById("player_log").innerText;
+	document.getElementById("player_log").textContent = message + "\n" + document.getElementById("player_log").textContent;
 });
 
 socket.on('hand', function(cards) {
