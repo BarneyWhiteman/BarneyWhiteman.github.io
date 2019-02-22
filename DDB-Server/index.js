@@ -11,7 +11,7 @@ app.use('/JavaScript', express.static(root + '/scripts'));
 app.use('/images', express.static(root + '/images'));
 app.use('/HTML', express.static(root + '/'));
 app.use('/CSS', express.static(root + '/styles'));
-app.use('/', express.static(root + '/'));
+//app.use('/', express.static(root + '/'));
 //Default page to send when somone connects to the server
 app.get('/', function(req, res){
   res.sendFile(root + '/ddb.html');
