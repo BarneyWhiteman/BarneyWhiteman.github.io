@@ -38,3 +38,21 @@ h1 {
 .tick {
 	list-style-image: url(../images/tick-small.png);
 }
+
+.photoCluster::after {
+	content: "";
+	clear: both;
+	display: table;
+}
+
+.photoCluster img {
+	float: left;
+	width: 50%;
+	padding: 5px;
+}
+
+@media (max-width: 600px) {
+	.photoCluster img{
+		width: 100%;
+	}
+}
