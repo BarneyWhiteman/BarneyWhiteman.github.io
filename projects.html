@@ -8,12 +8,12 @@
 	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		<link rel="stylesheet" href="./styles/style.css">
-		<title>Barney - Visual/Interactive Projects</title>
+		<title>Barney - Projects Home</title>
 		<link rel="icon" href="./images/icon.png">
 		<link href="https://fonts.googleapis.com/css?family=Montserrat:300" rel="stylesheet">
 	</head>
 
-	<body onload='loadGifs()'>
+	<body>
 		<div class="navbar navbar-expand bg-dark navbar-dark flex-column flex-md-row bd-navbar justify-content-between">
 		  <!-- Brand -->
 		  <a class="navbar-brand" href="/">Barney Whiteman</a>
@@ -29,14 +29,16 @@
 		     <li class="nav-item">
 		      	<a class="nav-link" href="youtube">YouTube</a>
 		    </li>
-
+		    <li>
+		      	<a class="nav-link" href="articles">Articles</a>
+		    </li>
 		    <!-- Dropdown -->
 		    <li class="nav-item dropdown">
-		      <a class="nav-link dropdown-toggle active" href="#" id="navbardrop" data-toggle="dropdown">Visual/Interactive Projects</a>
+		      <a class="nav-link dropdown-toggle active" href="#" id="navbardrop" data-toggle="dropdown">Projects Home</a>
 		      <div class="dropdown-menu">
-		        <a class="dropdown-item" href="projectsHome">Projects Home</a>
-		        <a class="dropdown-item" href="projects">Visual/Interactive Projects</a>
-		        <a class="dropdown-item" href="unexpectedOrcs">Unexpected Orcs</a>
+		        <a class="dropdown-item" href="projects">Projects Home</a>
+		        <a class="dropdown-item" href="projects/visualInteractive">Visual/Interactive Projects</a>
+		        <a class="dropdown-item" href="projects/unexpectedOrcs">Unexpected Orcs</a>
 		      </div>
 		    </li>
 		 </ul>
@@ -49,9 +51,48 @@
 	      <div class="jumbotron">
 	        <h1>Projects</h1>
 	        <hr class="my-4">
-					<h4 style="text-align: center">Find code for most of my projects over on my <a href="https://github.com/BarneyWhiteman/CodingChallenges">GitHub</a></h4>
+					<h4 style="text-align: center">Find code for most of my projects over on my <a href="https://github.com/BarneyWhiteman">GitHub</a></h4>
 	        <hr class="my-4">
-	        <div id="gifs"></div>
+	        
+
+	        <h3><b>Visual/Interactive Projects</b></h3>
+	        <a href="projects" class="btn btn-outline-success">View</a>
+	        <hr class="my-4">
+	        <p>Watch some Gifs of my creative coding projects! (Most of these projects have <a href="youtube">accompanying videos</a>).
+	        	</br>
+	        	The projects displayed in this section are all created using <a href="processing.org">Processing</a>, a language built on Java purpose built for creating generative and interactive
+	        	art and "sketches". I thouroughly enjoy creating these pieces as it allows me to easily visualise algorithms and acts as an output for my creative side!
+	        </p>
+	        <hr class="my-4">
+
+			<h3><b>"Unexpected Orcs"</b></h3>
+			<a href="unexpectedOrcs" class="btn btn-outline-success">View</a>
+			<p>Unexpected Orcs is an in-development Action RPG with roguelike elements. It is the spiritual successor to the unreleased flash game of the same name created by the same team in circa 2010.</p>
+	        <hr class="my-4">
+
+	        <h3><b>Digital Deck Builder</b></h3>
+	        <div>
+	        	<h5>(Honours thesis project)</h5>
+				<a href="/data/Barnaby_Whiteman_thesis.pdf" class="btn btn-outline-primary" download>Download Thesis</a>				
+	        </div>
+	        <hr class="my-4">
+	        <h5><b>Abstract</b></h5>
+	        <p>The purpose of this project was to create a software system that allowed users to play <i>Deck Building</i> games (a genre of tabletop card game) in an online environment. The project required the system to be flexible and able to play new games with minimum effort. Prior to this project, all <i>Digital Deck Builder</i> implementations (deck building games played virtually) allowed users to play only a single deck building game. This project addresses this limitation by creating a generic deck building environment that can play a variety of deck building games. Three games were implemented as part of the project to demonstrate the system’s functionality. These games are <i>Dominion</i>, <i>Ascension: Valley of the Ancients</i>, and <i>Caveman</i>.<br/>
+	        <br/>
+	        The project was made possible by the fact that deck builders share a few commonalities. The structure of players card decks, basic game mechanics (such as purchasing and playing cards), and game setup are all similar among the games within the genre.<br/>
+	        <br/>
+	        As the games are to be played online, a web-based solution was created. Both the front-end and back-end were programmed using the JavaScript language. In order to create the backend functionality, node.js was used to run JavaScript outside of a browser environment, while socket.io (a web socket implementation) handled communications to and from the clients. The front-end used P5.js, a basic graphics library, to render the games in-browser.<br/>
+	        <br/>
+	        Adding a game to the system is a case of creating two files and adding them to the system’s configuration file. Firstly, a JavaScript Object Notation (JSON) configuration file, holding the game’s basic information (such as cards, player statistics and starting decks) is required, as is a JavaScript custom functionality file. This holds the end-game condition as well as describing any cards whose functionality is not already built into the system and is too complex to be handled by JSON.<br/>
+	        <br/>
+	        The resulting system has a few limitations; however, it fills the requirements set out by the project. Most notably, the completed system can:
+	        <ul>
+				<li>host multiple games online; </li>
+				<li>play different types of games at once; and</li>
+				<li>have games added with game configuration and function files.</li>
+			</ul>
+			Future versions of the system could include features such as player log-in and improved visuals, however the system is currently ready to play.
+	       	</p>
 	      </div>
 
 		</div>
@@ -62,7 +103,6 @@
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-		<script src="scripts/projects.js"></script>
 	</body>
 
 </html>
