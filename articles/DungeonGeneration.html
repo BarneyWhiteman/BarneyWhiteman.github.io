@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-	
+
 	<head>
 		<!-- BOOTSTRAP STUFFS -->
 		<!-- Required meta tags -->
@@ -58,7 +58,7 @@
 				Randomly place <i>n</i> rooms and then randomly connect them to each other with "L" shaped corridors. While this certainly works, and was enough to get the ball rolling on the project,
 				it left a bit to be desired.
 				<br/>
-				This article detials the method that is currently being used for generating the Cellar Dungeon in Unexpected Orcs. The method is made to be pretty versatile and can generate a a wide variety 
+				This article detials the method that is currently being used for generating the Cellar Dungeon in Unexpected Orcs. The method is made to be pretty versatile and can generate a a wide variety
 				of dungeons with completely different feels. It's currently under-utilised in the game, but hopefully this article will demonstrate its usefullness.
 				<br/>
           		The generation can be broken down into three main steps:
@@ -69,69 +69,107 @@
 				</ol>
 			</p>
 			<hr class="my-4">
-          <h5>1. Placing rooms</h5>
-          Placing the rooms is the most difficult step in this algorithm, this is where all the magic happens. After the step has run you end up with something like the image below. Each numbered box
-          represents a room and each red line is the theoretical connection between them.
-          <div class="photoCluster">
-            <img src="../images/progressShots/LevelGraph.png" alt="Room Placement"/>
-          </div>
-          To get to this stage, the generator needs a bit of information. It takes a few room prefabs (hand built rooms made with our custom level builder), these are the spawn and boss rooms as well as a list 
-          of rooms that can be used to fill in the gaps. Along with these rooms, the generator is also given information about the maximum number of rooms, the closeness of the rooms to each other as 
-          well as the "spread" (I'll explain what the spread is in just a moment).
-          <br/>
-          <br/>
-          To start off the generation, the spawn room is set as the initial room from which all other rooms are placed. A random direction is chosen to be the overall "direction" of the dungeon. 
-          With those starting conditions, the rest of the room placement can begin. The placements are made by choosing a random, already placed room, along with a random angle. This angle is determined 
-          by a combination of the dungeon's "direction" and the "spread", essentially just a random angle defined by: direction + random(-spread, spread). Then a random distance is chosen between the 
-          minimum and maximum closeness. If the chosen placement of the room results in a collision with already placed rooms, the placment is discarded and retried.
-          <br/>
-          <br/>
-          During this process, the "depth" of each room is stored, that is the number of corridors needed to get to travel to the spawn room (for example: in the image above, room 8 would have a depth of 3).
-          It is also important to keep track of which rooms connect with which other rooms, this will allow us to generate the corridors later.
-          <br/>
-          <br/>
-          Once the maximum number of rooms have been placed, we can finally place the boss room. There are many ways this could be done, the way I decided to implement this was to place it using the previous
-          method but instead of using a random room to connect it to, I used the "deepest" room in the dungeon. I'm not entirely happy with this, but I will talk more about this when discussing the short comings 
-          of this approach at the end.
-          <br/>
-          <br/>
-          By following these steps, you end up with a situation that looks like the image above. At this point, only the location of the rooms is know, and which room connects to which. The next step is to
-          turn those theoretical connections into actual corridors.
-          <hr class="my-4">
-          <h5>2. Creating corridors</h5>
-          This step is relatively straight forward compared to the previous one, we already know which rooms need to be connected and we know where those rooms are placed. All we need to figure out is which
-          actual tiles to take to get there. If that sounds like a pathfinding problem to you, you'd be absolutely right!
-          <div class="photoCluster">
-            <img src="../images/progressShots/LevelMap.png" alt="Corridor Placement"/>
-          </div>
-          I specifically use the A* pathfinding algorithm and this is for a number of reasons.
-          <br/>
-          <br/>
-          Firstly, A* finds the shortest path (if it exists) between the start and the goal nodes. Both the Depth-First-Search (DFS), and the Breadth-First-Search (BFS) algorithms will find <i>a</i> path, but
-          not necessarily the <i>shortest</i> path. For dungeons that are supposed to man-made (well... depending on your game, not man, maybe dwarves? Orcs?..), I personally think it makes more sense to
-          have direct corridors.
-          <br/>
-          <br/>
-          Since we are also on a grid system and we know the locations of both where we are starting and where we want to end up, A* also has an advantage over Dijkstra's algorithm. This is that we can bias
-          our pathfinding in the direction of goal which should give us a speed boost. In practice, I doubt that it would help much since the search area is pretty small, but it's trivial to go from Dijkstra's
-          to A*.
-          <br/>
-          <br/>
-          So now that we've got our search algorithm sorted, we just need to run it! For each connection between rooms, we find the shortest path between their centres. Before adding a tile to the queue, 
-          we need to check if that tile is "valid". This is a pretty simple check; Are we in a room that isn't the start room or the goal room? (This includes the walls surronding the room, which for
-          us is not included in the room's definition) You don't want to mess up the beautiful prefabs!
-          <br/>
-          <br/>
-          We don't, however, need to worry about pathfinding arround other corridors. When we ignore the other corridors, it opens up the possibility of forked corridors as well as corridors that are more
-          than 1 tile wide (Both of these can be seen in this example, there is split corridors between rooms 0, 1, and 2. There is a 2-wide corridor leaving room 10 on the left).
-          <br/>
-          <br/>
-          Thats it! Corridors done and dusted. What we're left with is the positions of the rooms and the corridors, now it's time to turn them into tiles!
-          <hr class="my-4">
-          <h5>3. Filling in the tiles</h5>
-          <div class="photoCluster">
-            <img src="../images/progressShots/imageCellar.png" alt="Final Dungeon"/>
-          </div>
+        	<h5>1. Placing rooms</h5>
+			Placing the rooms is the most difficult step in this algorithm, this is where all the magic happens. After the step has run you end up with something like the image below. Each numbered box
+			represents a room and each red line is the theoretical connection between them.
+			<div class="photoCluster">
+				<img src="../images/progressShots/LevelGraph.png" alt="Room Placement"/>
+			</div>
+			To get to this stage, the generator needs a bit of information. It takes a few room prefabs (hand built rooms made with our custom level builder), these are the spawn and boss rooms as well as a list
+			of rooms that can be used to fill in the gaps. Along with these rooms, the generator is also given information about the maximum number of rooms, the closeness of the rooms to each other as
+			well as the "spread" (I'll explain what the spread is in just a moment).
+			<br/>
+			<br/>
+			To start off the generation, the spawn room is set as the initial room from which all other rooms are placed. A random direction is chosen to be the overall "direction" of the dungeon.
+			With those starting conditions, the rest of the room placement can begin. The placements are made by choosing a random, already placed room, along with a random angle. This angle is determined
+			by a combination of the dungeon's "direction" and the "spread", essentially just a random angle defined by: direction + random(-spread, spread). Then a random distance is chosen between the
+			minimum and maximum closeness. If the chosen placement of the room results in a collision with already placed rooms, the placment is discarded and retried.
+			<br/>
+			<br/>
+			During this process, the "depth" of each room is stored, that is the number of corridors needed to be travelled in order to get to the spawn room (for example: in the image above, room 8 would have a depth of 3).
+			It is also important to keep track of which rooms connect with which other rooms, this will allow us to generate the corridors later.
+			<br/>
+			<br/>
+			Once the maximum number of rooms have been placed, we can finally place the boss room. There are many ways this could be done, the way I decided to implement this was to place it using the previous
+			method but instead of using a random room to connect it to, I used the "deepest" room in the dungeon. I'm not entirely happy with this, but I will talk more about this when discussing the short comings
+			of this approach in the conclusion.
+			<br/>
+			<br/>
+			By following these steps, you end up with a situation that looks like the image above. At this point, only the location of the rooms is known, and which room connects to which. The next step is to
+			turn those theoretical connections into actual corridors.
+			<hr class="my-4">
+			<h5>2. Creating corridors</h5>
+			This step is relatively straight forward compared to the previous one, we already know which rooms need to be connected and we know where those rooms are placed. All we need to figure out is which
+			actual tiles to take to get there. If that sounds like a pathfinding problem to you, you'd be absolutely right!
+			<div class="photoCluster">
+				<img src="../images/progressShots/LevelMap.png" alt="Corridor Placement"/>
+			</div>
+			I specifically use the A* pathfinding algorithm and this is for a number of reasons.
+			<br/>
+			<br/>
+			Firstly, A* finds the shortest path (if it exists) between the start and the goal nodes. Both the Depth-First-Search (DFS), and the Breadth-First-Search (BFS) algorithms will find <i>a</i> path, but
+			not necessarily the <i>shortest</i> path. For dungeons that are supposed to human-made (well... depending on your game, not human, maybe dwarves? Orcs?..), I personally think it makes more sense to
+			have direct corridors.
+			<br/>
+			<br/>
+			Since we are on a grid system and we know both the starting location and where we want to end up, A* also has an advantage over Dijkstra's algorithm. It allows us to bias
+			our pathfinding in the direction of goal which should, in most cases, give us a speed boost. In practice, I doubt that it would help much since the search area is pretty small, but it's trivial to
+			go from Dijkstra's to A*
+			<br/>
+			<br/>
+			So now that we've got our search algorithm sorted, we just need to run it! For each connection between rooms, we find the shortest path between their centres. Before adding a tile to the queue,
+			we need to check if that tile is "valid". This is a pretty simple check; Are we in a room that isn't the start room or the goal room? (This includes the walls surronding a room, which for
+			us is not included in the room's definition. You don't want to mess up the beautiful prefabs!). If the answer is yes, then it's not a valid corridor position.
+			<br/>
+			<br/>
+			We don't, however, need to worry about pathfinding arround other corridors. When we ignore the other corridors, it opens up the possibility of forked corridors as well as corridors that are more
+			than 1 tile wide (Both of these can be seen in this example, there is split corridors between rooms 0, 1, and 2. There is a 2-wide corridor leaving room 10 on the left).
+			<br/>
+			<br/>
+			Thats it! Corridors done and dusted. What we're left with is the positions of the rooms and the corridors, now it's time to turn them into tiles!
+			<hr class="my-4">
+			<h5>3. Filling in the tiles</h5>
+			After the previous step we're left with a list of rooms and corridors that make up our dungeon, but we need to translate that into a tile map.
+			<br/>
+			<br/>
+			To do this is pretty straight forward. We start off with a tile map that fits the dimensions of the dungeon (we know these from by tracking the min/max coordinates when placing rooms and corridors), and fill it
+			with a generic wall tile.
+			<br/>
+			<br/>
+			We then loop through all the rooms in the dungeon and copy their tiles into the tile map. Once the rooms are in, we follow each corridor and place generic floor tiles to fill them in.
+			<br/>
+			<br/>
+			The final step to the whole process is applying the dungeon's "tileset". This is essentially a palette of tiles that is used to replace the generic wall and floor tiles from the previous set.
+			The tilesets let us specify which tiles to use for the walls and floors as well as some extra floor tiles that are randomly sprinkled in to add some variation.
+			<br/>
+			<br/>
+			A bonus of this is that by using the generic wall and floor tiles in the prefabs definition, we can have rooms that can be re-used across dungeons with different themes.
+			<br/>
+			<br/>
+			The final result of the generation can be seen here:
+			<div class="photoCluster">
+				<img src="../images/progressShots/imageCellar.png" alt="Final Dungeon"/>
+			</div>
+			(You'll note that the rooms look terrible, while I'd like to use the excuse that they were only test rooms (they are!), my lack of artistic talent is also partly to blame).
+			<hr class="my-4">
+			<h5>Conclusion</h5>
+			This is by no means a perfect dungeon generator, and depending on your goals it might not even be a good one. But for us it gets the job done. It allows us to get a wide variety of dungeons by just tweaking a
+			few parameters, creating some room prefabs, and making a few tile sets.
+			<br/>
+			<br/>
+			As I mentioned in the first step, boss room placement still needs some work. The first issue with it is that it is possible to end up in a situation where there is no valid placement for the boss room when it stems off
+			the deepest room. A possible solution for this would to limit the attempts at placing the boss room before moving on to the next deepest room, or maybe just start over again. The second issue is that you might not want
+			the boss room to always be the deepest one. Using the deepest room seems like a fairly good general case, but not having the flexibility irks me.
+			<br/>
+			<br/>
+			There are also some things that I would like to add to this generator in the future:
+			<ul>
+				<li>Room prefabs able to specify door locations instead of using the centre of the room for pathfinding</li>
+				<li>Rotation and reflection of rooms to allow for variety</li>
+				<li>Introduce "cycles" into the room graph so that dead-ends are reduced and there is more choice in which path to take</li>
+			</ul>
+			<hr class="my-4">
+			If you made it this far, thank you! I hope you enjoyed it and maybe even found it useful. If you have any questions at all feel free to <a href="../contact">get in touch</a>.
 	      </div>
 		</div>
 
