@@ -61,3 +61,14 @@ h1 {
 		width: 100%;
 	}
 }
+
+pre code {
+	background: #333;
+	color: #eee;
+	font-family: monospace;
+	font-size: 1.2em;
+	padding: 32px;
+	width: 100%;
+	max-width: 100%;
+	display: block;
+}
