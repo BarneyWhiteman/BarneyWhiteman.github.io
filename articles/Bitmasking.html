@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-	
+
 	<head>
 		<!-- BOOTSTRAP STUFFS -->
 		<!-- Required meta tags -->
@@ -24,11 +24,11 @@
 		      	<a class="nav-link" href="/">Home</a>
 		    </li>
 		    <li class="nav-item">
-				<a class="nav-link" href="../about">About</a>
-			</li>
-		     <li class="nav-item">
-		      	<a class="nav-link" href="../youtube">YouTube</a>
-		    </li>
+          <a class="nav-link" href="../about">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../youtube">YouTube</a>
+        </li>
 		    <li>
 		      	<a class="nav-link active" href="../articles">Articles</a>
 		    </li>
@@ -46,20 +46,116 @@
 		</div>
 
 
-	    <div class="container">
+    <div class="container">
 
-	      <div class="jumbotron">
-          <h1>Bitmasking</h1>
-          <p>Date</p>
-	        <hr class="my-4">
+      <div class="jumbotron">
+        <h1>Bitmasking Tile Textures</h1>
+        <p>July 2020</p>
+        <hr class="my-4">
+        <h3><b>Introduction</b></h3>
+        <p>
+          The game I'm working on (<a href="/projects/UnexpectedOrcs">Unexpect Orcs</a>) uses tile-based terrain, and in an effort to give it more visual appeal, my team and I thought "wouldn't it be
+          cool if we could give the walls a bit of perspective".
+          <br/>
+          Of course, we weren't the first to think this and we almost certainly won't be the last. We did a bit of research and came across the technique
+          of bitmasking tile textures, <a href="https://gamedevelopment.tutsplus.com/tutorials/how-to-use-tile-bitmasking-to-auto-tile-your-level-layouts--cms-25673">this article</a> was particularly helpful (I highly
+          recommend reading that article first if you don't know what tile bitmasking is, it explains it much better than me and has pretty pictures. I do, however, give it a red hot go below if you don't want to read it).
+          <br/>
+          <br/>
+          Tile bitmasking automates the laborious process of hand placing border tiles where one or more tile type comes together, or in our case, allows us to have borders at all on generated terrain.
+          Unfortunately, to do tile bitmasking you need A LOT of textures for each type of tile, 48 to be exact. Due to this, we ended making a system that only needs two textures for each terrain type in
+          order to generate all the required tiles.
+          <br/>
+          <br/>
+          This article will first go over what bit-masking is and how it applies to tiles and textures. Following that I will discuss our approach to it and how our tile texture generation works. I would suggest that
+          now is the prefect time to go and make yourself a hot beverage as I tend to ramble on a tad.
+        </p>
+        <hr class="my-4">
+        <h3><b>What is bitmasking?</b></h3>
+        <p>
+          Bitmasking is fairly common technique used in the computing world and applies to much more than just tiled textures. The basic premise behind it is that you can store a group of
+          binary values as a single value by using each storage bit individually. For example if you had a 4-bit integer, you could define the bits to be:
+          <br/>
+          <table>
+            <tr>
+              <th>Bit</th>
+              <td>3</td>
+              <td>2</td>
+              <td>1</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <th>Value</th>
+              <td>Boss room unlocked</td>
+              <td>Mini-boss killed</td>
+              <td>Chest opened</td>
+              <td>Has key</td>
+            </tr>
+          </table>
+          <br/>
+          If the value of the integer was 12 (1100 in binary), it would show that the player has unlocked the boss room and killed the mini-boss but hasn't opened the chest or found the key. This is because the 3rd and 2nd
+          bits are both 1 indicating TRUE while the 1st and 0th bits are 0, meaning FALSE.
+          <br/>
+          <br/>
+          If you want to know the state of a single boolean, you can create a mask for the desired bit (a bit-mask, this is where the name is from!) and perform a bit-wise AND on the value.
+          For the example above, the mask for the mini-boss being killed would be 0100. When you bit-wise AND the state (1100) and the mask (0100) you are left with 0100, indicating that the mini-boss is dead.
+          If you wanted to know whether or not the chest was open, you would use the mask 0010. 1100 bit-wise AND 0010 gives you 0000, therefore the chest is still closed.
+          <br/>
+          Generating the mask is straight foward when using bit-shifting. Take a look at this psuedo code example:
+<pre><code><comment>// returns if the <i>n</i>th bit of value is on or off (starts from 0)</comment>
+function getBit(value, n) {
+  <comment>// the &lt;&lt; operator is called a left shift
+  // the value to the left of the operator is the one being shifted
+  // the one to the right indicates by how much
+  // eg. 5 &lt;&lt; 2 would return 20
+  // this makes little sense until you look at the binary
+  // 5 = 101, 20 = 10100. The 101 as been shifted left by 2 bits</comment>
+  mask = 1 &lt;&lt; n
+  return (val & mask) > 0
+}
 
-          <h3><b>Section</b></h3>
-          <hr class="my-4">
-          <h3>Sub-Section</h3>
-          <p>
-            Text
-          </p>
-	      </div>
+state = 6 <comment>// 1100</comment>
+
+getBit(state, 2) <comment>// true, mini-boss is dead</comment>
+getBit(state, 1) <comment>// false, chest is NOT open</comment>
+
+</code></pre>
+        </p>
+        <hr class="my-4">
+        <h3><b>How do we apply it?</b></h3>
+        <p>
+          In order to place tiles with the correct border texture, we need to know what the surrounding tiles are and how they are placed. Each tile has eight neighbours (four directly adjacent and four on the diagonals)
+          and we need to know whether or not each of those neighbours is the same tile type as the centre one or not. Sounds like the perfect application for bitmasking eh?
+          <br/>
+          <br/>
+          Using an 8-bit number we can describe every possible combination of the surrounding eight neighbours, 1-bit per neighbour. We simply check each neighbour in turn and set its corresponding bit to be either 1
+          if it is the same as current tile, or 0 if it's not. What we are left with is a value (we will call this the bitmask even though it's not a bit-mask) maps directly to the shape of the border. Pretty simple!
+          <br/>
+          <br/>
+          It was at about this point that I realised that something being simple defintely does not make it easy. We are left with 256 possible bitmask values! I don't know about you, but I defintely don't want to be drawing that many
+          tiles per tile type! Thankfully there are multiple values that end up with the same border shape which whittles the number down to 48 unique tiles and this ican be improved further to 16 when you factor in rotations.
+          Even so, that's a lot of tiles to draw (especially when you posses the artistc talent of a wet towel and need to keep updating your textures. I don't want to have to change 16 textures just because I improved the stone texture!).
+          <br/>
+          <br/>
+          I quickly came to the conclusion that doing that by hand simply would not do. Time for more automation!
+        </p>
+        <hr class="my-4">
+        <h3><b>Texture creation automation</b></h3>
+        <p>
+          Now I want to preface this section by saying we managed to simplify this problem a lot by the fact that we only ever have flat borders between textures. A lot of the pixel art textures out there have have really nice transations
+          between tile types. They'll have ripples where the ocean meets the land and tufts of grass where the dirt path winds through. Not only does this require art skills we don't have, it also drastically increases the
+          complexity of generating these textures. It is something I'd like to explore someday though.
+          <br/>
+          <br/>
+          Now that's out of the way, let's jump in! The most difficult part of all this was figuring how all 256 possible bitmask values translated into the 16 shapes and their rotations. You had better believe that I made
+          a big ol' spreadsheet of every single bitmask to figure it out. I probably could have drawn all the tiles I'd ever need in the time it took me to do it, but now that I've done it, you don't have to.
+          <br/>
+          <br/>
+          <ol>
+            <li></li>
+          </ol>
+        </p>
+      </div>
 		</div>
 
 

@@ -72,3 +72,12 @@ pre code {
 	max-width: 100%;
 	display: block;
 }
+
+comment {
+	color: #88cc88
+}
+
+table, th, td {
+	border: 1px solid #333;
+	padding: 8px;
+}

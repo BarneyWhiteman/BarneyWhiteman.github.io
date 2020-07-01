@@ -49,27 +49,27 @@
 	    <div class="container">
 
 	      <div class="jumbotron">
-          	<h1>Custom Dungeon Generation</h1>
-          	<p>3rd Feb 2020</p>
-			<hr class="my-4">
-			<h3><b>Introduction</b></h3>
-        	<p>
-				While creating the game <a href="/projects/UnexpectedOrcs">Unexpect Orcs</a>, my team and I needed a way to generate the dungeon levels. We initially implement a fairly basic algorthim;
-				Randomly place <i>n</i> rooms and then randomly connect them to each other with "L" shaped corridors. While this certainly works, and was enough to get the ball rolling on the project,
-				it left a bit to be desired.
-				<br/>
-				This article detials the method that is currently being used for generating the Cellar Dungeon in Unexpected Orcs. The method is made to be pretty versatile and can generate a a wide variety
-				of dungeons with completely different feels. It's currently under-utilised in the game, but hopefully this article will demonstrate its usefullness.
-				<br/>
-          		The generation can be broken down into three main steps:
-				<ol>
-					<li>Place rooms</li>
-					<li>Connect rooms</li>
-					<li>Fill with tiles</li>
-				</ol>
+        <h1>Custom Dungeon Generation</h1>
+        <p>July 2020</p>
+        <hr class="my-4">
+        <h3><b>Introduction</b></h3>
+        <p>
+          While creating the game <a href="/projects/UnexpectedOrcs">Unexpect Orcs</a>, my team and I needed a way to generate the dungeon levels. We initially implement a fairly basic algorthim;
+          Randomly place <i>n</i> rooms and then randomly connect them to each other with "L" shaped corridors. While this certainly works, and was enough to get the ball rolling on the project,
+          it left a bit to be desired.
+          <br/>
+          This article detials the method that is currently being used for generating the Cellar Dungeon in Unexpected Orcs. The method is made to be pretty versatile and can generate a a wide variety
+          of dungeons with completely different feels. It's currently under-utilised in the game, but hopefully this article will demonstrate its usefullness.
+          <br/>
+                The generation can be broken down into three main steps:
+          <ol>
+            <li>Place rooms</li>
+            <li>Connect rooms</li>
+            <li>Fill with tiles</li>
+          </ol>
 			</p>
 			<hr class="my-4">
-			<h5>1. Placing rooms</h5>
+			<h3><b>Step 1. Placing rooms</b></h3>
 			<p>
 				The placement of the rooms is the most difficult step in this algorithm, this is where all the magic happens and is what gives the dungeons their feel. After completing this step you are left with something
 				like the image below. Each numbered box represents a room and each red line shows how they are linked together.
@@ -134,7 +134,7 @@
 				turn those theoretical connections into actual corridors.
 			</p>
 			<hr class="my-4">
-			<h5>2. Creating corridors</h5>
+			<h3><b>Step 2. Creating corridors</b></h3>
 			<p>
 				This step is relatively straight forward compared to the previous one, we already know which rooms need to be connected and we know where those rooms are placed. All we need to figure out is which
 				actual tiles to take to get there. If that sounds like a pathfinding problem to you, you'd be absolutely right!
@@ -167,7 +167,7 @@
 				Thats it! Corridors done and dusted. What we're left with is the positions of the rooms and the corridors, now it's time to turn them into tiles!
 			</p>
 			<hr class="my-4">
-			<h5>3. Filling in the tiles</h5>
+			<h3><b>Step 3. Filling in the tiles</b></h3>
 			<p>
 				We now have the location of all the tiles that make up our dungeon, but we need to translate that into a tile map.
 				<br/>
@@ -195,7 +195,7 @@
 				You'll note that the rooms look terrible and while I'd like to use the excuse that they were only test rooms, my lack of artistic talent is also partly to blame.
 			</p>
 			<hr class="my-4">
-			<h5>Wrapping it up</h5>
+			<h3><b>Wrapping it up</b></h3>
 			<p>
 				This is by no means a perfect dungeon generator, and depending on your goals it might not even be a good one, but it allows us to get a wide variety of dungeons by just tweaking a
 				few parameters.
