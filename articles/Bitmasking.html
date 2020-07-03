@@ -55,7 +55,7 @@
         <h3><b>Introduction</b></h3>
         <p>
           The game I'm working on (<a href="/projects/UnexpectedOrcs">Unexpect Orcs</a>) uses tile-based terrain, and in an effort to give it more visual appeal, my team and I thought "wouldn't it be
-          cool if we could give the walls a bit of perspective".
+          cool if we could give the walls a bit of perspective and have borders between tile types".
           <br/>
           Of course, we weren't the first to think this and we almost certainly won't be the last. We did a bit of research and came across the technique
           of bitmasking tile textures, <a href="https://gamedevelopment.tutsplus.com/tutorials/how-to-use-tile-bitmasking-to-auto-tile-your-level-layouts--cms-25673">this article</a> was particularly helpful (I highly
@@ -147,13 +147,78 @@ getBit(state, 1) <comment>// false, chest is NOT open</comment>
           complexity of generating these textures. It is something I'd like to explore someday though.
           <br/>
           <br/>
-          Now that's out of the way, let's jump in! The most difficult part of all this was figuring how all 256 possible bitmask values translated into the 16 shapes and their rotations. You had better believe that I made
+          Now that's out of the way, let's jump in! As I alluded to earlier, there are only 16 border shapes when you ignore rotations so we need to create a mask for each of these shapes which you can see below:
+        </p>
+        <div class="photoCluster">
+          <img src="../images/progressShots/2018_11_10_textures_cave.png" alt="Cave Textures"/>
+          <img src="../images/progressShots/2018_11_11_Dungeon_textures.png" alt="Grass Textures"/>
+        </div>
+        <p>
+          How do we use these masks? I'm glad you asked.
+          <ol>
+            <li>Get the bitmask of a tile from the tile data</li>
+            <li>Figure out which of the 16 border shapes we need</li>
+            <li>Figure out how the shape needs to be rotated for the bitmask</li>
+            <li>Rotate the border shape mask, colour it, and slap it over the top of the base texture</li>
+          </ol>
+          <br/>
+          The most difficult part of all this was figuring how all 256 possible bitmask values translated into the 16 shapes and their rotations. You had better believe that I made
           a big ol' spreadsheet of every single bitmask to figure it out. I probably could have drawn all the tiles I'd ever need in the time it took me to do it, but now that I've done it, you don't have to.
           <br/>
           <br/>
-          <ol>
-            <li></li>
-          </ol>
+          We could just create a map that points from the 256 values directly to a border shape and rotation to use but due to the way our game handles caching textures this was not optimal. Instead we opted for an intermediate step
+          where we first reduce the bitmask to one of the 48 values we mentioned earlier (where we treat rotations of the same border mask as separate entites. Our textures are rotation-specific so we can't rotate the final texture,
+          only the border mask can be rotated so we need to know the pre-rotation bitmask value).
+          <br/>
+          We then map these 48 values to a border shape and a rotation. Since we wanted some perspective, our walls need two textures each. To know which one we need to use we can use the bitmask to see if the tile directly
+          below is the same type or not. All that's left to do is combine the border mask with the base texture and we are done!
+          <br/>
+          <br/>
+          I'm not sure how well all of that came across in text, so here is some psuedo code to fill in the gaps:
+<pre><code>function getTileTexture(tileType, bitmask) {
+  <comment>// 1st reduction to one of the 48 values</comment>
+  bitmask = bitmaskMap.get(bitmask)
+  if(isCached(tileType, bitmask)) {
+    <comment>// don't generate if we've already generated it</comment>
+    return getCached(tileType, bitmask)
+  }
+  <comment>// the magic happens in here</comment>
+  texture = generateTexture(tileType, bitmask)
+  return texture
+}
+
+function generateTexture(tileType, bitmask) {
+  <comment>// 2nd reduction into one of 16 values</comment>
+  borderMask = bitmaskImage.get(bitmask)
+  <comment>// get the border rotation</comment>
+  rotation = bitmaskRotation.get(bitmask)
+
+  <comment>// rotate and colour the border</comment>
+  borderMask = rotate(borderMask, rotation)
+  borderMask = colour(borderMask, borderColour(tileType))
+
+  baseTexture = getTexture(tileType, bottom=isBottom(bitmask))
+
+  <comment>// smack the borderMask over the top of the bas texture</comment>
+  texture = combine(baseTexture, borderMask)
+
+  cache(texture, tileType, bitmask)
+
+  return texture;
+}
+</code></pre>
+        </p>
+        <hr class="my-4">
+        <h3><b>Conclusion</b></h3>
+        <p>
+          Bitmasking the tile textures allows us to do some cool stuff and certianly helps break up repatative textures. Our solution is a tad on clunky side but it will improve with time.
+          <br/>
+          One of the hardest desicions to make was whether to generate all the textures before hand and save them or to generate them at runtime as they're needed. There are certainly pros and
+          cons to both approaches.
+        </p>
+        <hr class="my-4">
+        <p>
+          Thanks for reading all of this, I'm not sure how many people will make it this far! If you have any questions or suggestions feel free to <a href="../contact">get in touch!</a>
         </p>
       </div>
 		</div>
