@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-	
+
 	<head>
 		<!-- BOOTSTRAP STUFFS -->
 		<!-- Required meta tags -->
@@ -52,15 +52,17 @@
         <h1>Unexpected Orcs</h1>
         <hr class="my-4">
         <h4 style="text-align: center">Find the code for Unexpected Orcs over on <a href="https://github.com/Gorge-Studios/Unexpected-Orcs">GitHub</a></h4>
-        <hr class="my-4">            
-      
+        <hr class="my-4">
+
         <h3><b>Overview</b></h3>
         <p>
-          Unexpected Orcs is an in-development bullet-hell Action RPG with roguelike elements. It is the spiritual successor to the unreleased flash game of the same name created by the same team in circa 2011.
+          Unexpected Orcs is an in-development bullet-hell Action RPG with roguelike elements. It is the spiritual successor to the unreleased flash game of the same name created by the same team (circa 2011).
           <br/>
           The project written in a custom Java engine that uses <a href="processing.org">Processing</a> to handle the graphics side of things.
           <br/>
-          Below are a few screenshots that I took over the course of development with a few brief notes sprinkled in for taste. Note: The most recent pictures are at the top!
+          Below are a few screenshots that I took over the course of development with a few brief notes sprinkled in for taste.
+          <br/>
+          Note: The most recent pictures are at the top!
         </p>
         <hr class="my-4">
 
@@ -74,7 +76,7 @@
             <li>The Cellar</li>
             <li>The Grass Dungeon</li>
           </ul>
-          The first three of which are generated using a cellular automata approach where as the Cellar and the Grass Dungeon both generated with more advanced custom dungeon generators 
+          The first three of which are generated using a cellular automata approach where as the Cellar and the Grass Dungeon both generated with more advanced custom dungeon generators
           (the generators are discussed more a bit later!).
         </p>
         <div class="photoCluster">
@@ -94,7 +96,7 @@
           <img src="../images/progressShots/2020_01_28_Tresure.PNG" alt="Treasure"/>
           <img src="../images/progressShots/2020_01_28_StatusEffects.PNG" alt="Status Effects"/>
         </div>
-        
+
         <hr class="my-4">
         <h3><b>Development</b></h3>
         <hr class="my-4">
@@ -102,34 +104,36 @@
         <p>
           The first thing we worked on was getting some level generation started. We knew that there would be two main area types; "Cave" type levels and "Dungeon" type levels.
           <br/>
-          The cave type levels needed to be more open, allowing for better long range combat and freer movement and dodging. The dungeon type levels were made to be more restrictive, encouraging 
+          The cave type levels needed to be more open, allowing for better long range combat and freer movement and dodging. The dungeon type levels were made to be more restrictive, encouraging
           the player to get closer to enemies.
           <br/>
           <br/>
-          The cave dungeons are all generated using a cellular automata approach. Basically what that means is that, initially, tiles in the map are randomly set to either be a WALL or FLOOR 
-          (black tiles and white tiles repspectively). Then, based on the number of walls and floors that surround a tile and whether it is a wall or tile itself, set the tile to be either a wall 
-          or a floor. That's a lot of walls and floors! The technique we used is heavily based on the approach outlined on 
-          <a href="http://www.roguebasin.com/index.php?title=Cellular_Automata_Method_for_Generating_Random_Cave-Like_Levels">roguebasin</a>, so definitely go and check that out. There are a bunch of 
-          parameters to tweak with this technique so that you can get the generator fairly consistantly giving your levels the feel you were after.
+          The cave dungeons are all generated using a cellular automata approach. Basically what that means is that, initially, tiles in the map are randomly set to either be a WALL or FLOOR
+          (black tiles and white tiles repspectively). Then, based on the number of walls and floors that surround a tile and whether it is a wall or floor tile itself, set the tile to be either a wall
+          or a floor. That's a lot of walls and floors! The technique we used is heavily based on the approach outlined on
+          <a href="http://www.roguebasin.com/index.php?title=Cellular_Automata_Method_for_Generating_Random_Cave-Like_Levels">roguebasin</a>, so definitely go and check that out. There are a bunch of
+          parameters to tweak with this technique so that you can get the generator fairly consistantly giving your levels the feel you are after.
           <br/>
-          In the current state, the cave generator also checks for disconnected sections of floor and (if they're the right size) turns them into treasure rooms.
-          <div class="photoCluster">
-            <img src="../images/progressShots/2018_11_09_Cave.png" alt="Cave Generation"/>
-          </div>
+          In the current state, the cave generator also checks for closed off sections of floor and, if they're the right size, turns them into treasure rooms (otherwise they get filled in).
+        </p>
+        <div class="photoCluster">
+          <img src="../images/progressShots/2018_11_09_Cave.png" alt="Cave Generation"/>
+        </div>
+        <p>
           <br/>
-          For the dungeons we explored two different techniques, one of which is still used for the Grass Dungeon and I'll talk about it first. The basic premise behind it is to randomly place some 
-          rooms and then generate a maze in the space left. You then add doorways from each of the rooms into the maze and then remove all the dead-ends of the maze. This gives us a really nice, 
+          For the dungeons we explored two different techniques, one of which is still used for the Grass Dungeon and I'll talk about it first. The basic premise behind it is to randomly place some
+          rooms and then generate a maze in the space left. You then add doorways from each of the rooms into the maze and then remove all the dead-ends of the maze. This gives us a really nice,
           windy dungeon that is perfect for a hedge maze inspired level!
           <br/>
-          I found this technique on <a href="https://journal.stuffwithstuff.com/2014/12/21/rooms-and-mazes/">Bob Nystrom's brilliant website</a> (there are so many great articles on there!), 
+          I found this technique on Bob Nystrom's <a href="https://journal.stuffwithstuff.com/2014/12/21/rooms-and-mazes/">brilliant website</a> (there are so many great articles on there!),
           so if you want to learn how this was done in more detail, go and have a look at that.
           <br/>
           <br/>
-          Whilte perfectly suited to an organicly styled level, we knew that those extra-windy corridors would not suit a dungeon that was supposed to have been created as apposed to grown. As such
+          While perfectly suited to an organicly styled level, we knew that those extra-windy corridors would not suit a dungeon that was supposed to have been created as apposed to grown. As such
           we made our own rudimentry "hand-made" dungeon generator.
           <br/>
           The basic premise behnid this was to randomly place some rooms like before, but then instead of creating a maze between them, just
-          randomly connect them together with "L" shaped corridors. This lead to an <i>okay</i>(ish) dungeon, but one with a lot things that didn't make sense.We knew we'd have to come back to this
+          randomly connect them together with "L" shaped corridors. This lead to an <i>okay</i> (ish) dungeon, but one with a lot things that didn't make sense. We knew we'd have to come back to this
           one to fix it up (keep reading to find out about that!), but it was more than enough to get the project underway.
         </p>
         <div class="photoCluster">
@@ -144,49 +148,57 @@
           <br/>
           Our first attempts left a bit to be desired. As you can see here, the colours are a bit off (the floor is basically red and the walls were far too green) and it all just looked a
           bit flat.
-          <div class="photoCluster">
-            <img src="../images/progressShots/2018_11_10_Dungeon2_textures.png" alt="Dungeon Textures"/>
-          </div>
+        </p>
+        <div class="photoCluster">
+          <img src="../images/progressShots/2018_11_10_Dungeon2_textures.png" alt="Dungeon Textures"/>
+        </div>
+        <p>
           <br/>
-          To combat this, we gave the wall tiles some dimension and worked on balancing the colours a better to make a more cohesive scene. You can see in these next screenshots just how
+          To combat this, we gave the wall tiles some dimension and worked on balancing the colours better to make a more cohesive scene. You can see in these next screenshots just how
           effective adding some shading to the wall tiles can be. To achieve this effect, we had to check if the wall tiles were on the "bottom" (has a floor tile below it) and assign
           the sprites accordingly.
-          <div class="photoCluster">
-            <img src="../images/progressShots/2018_11_10_textures_cave.png" alt="Cave Textures"/>
-            <img src="../images/progressShots/2018_11_11_Dungeon_textures.png" alt="Grass Textures"/>
-          </div>
+        </p>
+        <div class="photoCluster">
+          <img src="../images/progressShots/2018_11_10_textures_cave.png" alt="Cave Textures"/>
+          <img src="../images/progressShots/2018_11_11_Dungeon_textures.png" alt="Grass Textures"/>
+        </div>
+        <p>
           While this drastically improved the overall look of the levels, it still wasn't quite enough. To help better define the walls, we started doing some very basic texture bitmasking, which is
           essentially an upgraded version of what we were doing by checking for wall tiles being on the "bottom".
           <br/>
-          Bitmasking tile textures means checking a tiles neighbours to figure out which ones are of the same type, based on this, assign it a texture. There is a really great tutorial for
+          Bitmasking tile textures means checking a tiles neighbours to figure out which ones are of the same type, and assigning a texture based on the pattern. There is a really great tutorial for
           this over <a href="https://gamedevelopment.tutsplus.com/tutorials/how-to-use-tile-bitmasking-to-auto-tile-your-level-layouts--cms-25673">here</a> so take a look at that if you're interested.
           <br/>
           <br/>
-          For the simple version we implemented we only checked the tiles in the four cardinal directions, meaning there are 16 textures to make per wall type. As you can see in the image below
-          on the left, this leaves little gaps in the corners of each tiles. 
-          <div class="photoCluster">
-            <img src="../images/progressShots/bitmasking_basic.PNG" alt="Basic Bitmasking"/>
-            <img src="../images/progressShots/bitmasking_advanced.PNG" alt="Advanced Bitmasking"/>
-          </div>
-          To fix this we implemented a more advanced system that is able to generate the bitmasked textures on the fly, which massively simplifies adding and modifying tile textures. 
-          Because this new system makes it so easy we were able to make the bitmasking now check the tiles diagonally adjacent too it as well, fixing the issue with the corners. We also
-          decided to add the bitmasking to the floor tiles as well, which you can see in the image below. 
-          <br/>
-          <div class="photoCluster">
-            <img src="../images/progressShots/bitmasking_advanced2.PNG" alt="Advanced Bitmasking with multiple tiles"/>
-          </div>
+          For the simple version we implemented we only checked the tiles in the four cardinal directions, meaning there are 16 textures to make per wall type. As you can see when comparing the images below,
+          this leaves little gaps in the corners of each tile.
         </p>
+        <div class="photoCluster">
+          <img src="../images/progressShots/bitmasking_basic.PNG" alt="Basic Bitmasking"/>
+          <img src="../images/progressShots/bitmasking_advanced.PNG" alt="Advanced Bitmasking"/>
+        </div>
+        <p><i>Simple version on the left, final version on the right</i></p>
+        <p>
+          We fixed this by implementing a system that is able to generate the bitmasked textures on the fly, which massively simplifies adding and modifying tile textures.
+          Because this new system makes it so easy we were able to make the bitmasking now check the tiles diagonally adjacent too it as well, fixing the issue with the corners. We also
+          decided to add the bitmasking to the floor tiles as well, which you can see in the image below.
+        </p>
+        <div class="photoCluster">
+          <img src="../images/progressShots/bitmasking_advanced2.PNG" alt="Advanced Bitmasking with multiple tiles"/>
+        </div>
         <hr class="my-4">
         <h3>GUI</h3>
         <p>
-          Once we had some nice looking tiles, we needed some way to see all the character's stats and inventory on the screen. 
+          Once we had some nice looking tiles, we needed some way to see all the character's stats and inventory on the screen.
           <br/>
-          Below on the left, you can see a little mockup that we made and on the right you can see an early in-development version of the GUI with basic health and mana bars as well 
-          as a very early version of the inventory.
-          <div class="photoCluster">
-            <img src="../images/progressShots/2018_11_22_GUI_mock2.png" alt="GUI Mockup"/>
-            <img src="../images/progressShots/2018_11_23_Inventory1.png" alt="GUI implemented"/>
-          </div>
+          Below on the left, you can see a little mockup that we made and on the right you can see an early version of the GUI with basic health and mana bars as well
+          as a very basic inventory.
+        </p>
+        <div class="photoCluster">
+          <img src="../images/progressShots/2018_11_22_GUI_mock2.png" alt="GUI Mockup"/>
+          <img src="../images/progressShots/2018_11_23_Inventory1.png" alt="GUI implemented"/>
+        </div>
+        <p>
           The current GUI matches fairly closely with what we had planned it to be, the main differences are the lack of XP bar and the map position changing. We changed the XP bar for two
           reasons. Firstly, we ended up making each stat level up individually so we gave each stat its own mini level up bar. Secondly, we needed a bit of room for some extra GUI elements
           that were not always present, namely item bag inventories and portal entery buttons.
@@ -198,13 +210,14 @@
         <p>
           We also custom built a menu UI system that has a fair bit of functionality (as you can see, the title is currently being workshopped since, let's face it,
           Unexpected Orcs sounds like a bunch of 12 year olds came up with it when creating a Lord of the Rings inspired flash game in 2011!)
-          
+        </p>
           <div class="photoCluster">
             <img src="../images/progressShots/2020_01_28_Title.PNG" alt="Main Menu"/>
           </div>
-          While the game has perma-death, you don't have to play a run all at once, you are able to save the progress of your characters and load them back in at a later time. 
-          There is, however, the more hard-core "guest mode" where you can't save if you want a real challenge. And of course there is a settings menu to change all the basic things like
-          controls, music and sounds and resolution etc.
+        <p>
+          While the game has perma-death, you don't have to play a run all at once, you are able to save the progress of your characters and load them back in at a later time.
+          If you want a real challenge, there is the more hard-core "guest mode" where you can't save. And of course there is a settings menu to change all the basic things like
+          controls, sounds, graphics etc.
           <div class="photoCluster">
             <img src="../images/progressShots/2020_01_28_Load.PNG" alt="Load Screen"/>
             <img src="../images/progressShots/2020_01_28_Settings.PNG" alt="Settings Menu"/>
@@ -215,23 +228,22 @@
         <p>
           As I mentioned before, we needed an upgrade for the "hand-made" dungeons. This generator has quite a bit going on under the hood so I won't go into detail here, however
           these three images show some of the steps taken along the way.
-          <br/>
-          <br/>
-          If you want to learn all the nitty-gritty, you can  read the article I wrote on it <a href="articles/dungeonGeneration">here</a>.
-        </p>  
+        </p>
           <div class="photoCluster">
             <img src="../images/progressShots/LevelGraph.png" alt="Room Placement"/>
             <img src="../images/progressShots/LevelMap.png" alt="Corridor Placement"/>
             <img src="../images/progressShots/imageCellar.png" alt="Final Dungeon"/>
           </div>
+        <p>
+          If you want to learn all the nitty-gritty, you can  read the article I wrote on it <a href="articles/dungeonGeneration">here</a>.
         </p>
         <hr class="my-4">
         <p>
           Thank you so much if you made it this far! That's all for the moment, I hope this page gave you a bit of insight into what goes into making even a fairly simple game like this. This is by no means an exhuastive collection
-          of all the systems the game uses. I haven't touched anything to do with items, enemies, or any gameplay (this is mainly because I wasn't as involved with that stuff).
+          of all the systems the game uses. I haven't touched anything to do with items, enemies, or any gameplay (this is mainly because I wasn't as heavily involved with that stuff).
           <br/>
           <br/>
-          If there is anything you'd like to know more about or if you have any questions, feel free to <a href="contact">get in touch!</a> 
+          If there is anything you'd like to know more about or if you have any questions, feel free to <a href="contact">get in touch!</a>
         </p>
       </div>
 		</div>
