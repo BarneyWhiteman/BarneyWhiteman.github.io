@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Bitmasking - Barney</title><link rel="icon" type="image/png" href=icon.png /><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Learn about what bitmasking is and how you can use it to give the tiles in your game a facelift." />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="Bitmasking" />
+<meta property="og:description" content="Learn about what bitmasking is and how you can use it to give the tiles in your game a facelift." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://barneyw.net/posts/bitmasking/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-07-03T18:34:21+10:00" />
+<meta property="article:modified_time" content="2020-07-03T18:34:21+10:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Bitmasking"/>
+<meta name="twitter:description" content="Learn about what bitmasking is and how you can use it to give the tiles in your game a facelift."/>
+<script src="https://barneyw.net/js/feather.min.js"></script>
+	
+	
+        <link href="https://barneyw.net/css/fonts.7fa06c2792c8589768ffcdaf014e4bfc7f2ccbfba059f8e87131158970c23ed3.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="https://barneyw.net/css/main.3dae439ff12a61f699102d9d30f83caa4d179f5226a63b4a5096642eb6b4dcfc.css" />
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="https://barneyw.net/">Barney</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/about">About</a>
+		
+		<a href="/posts">Posts</a>
+		
+		<a href="/youtube">YouTube</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/contact">Contact</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">Bitmasking</h1>
+			<div class="meta">Posted on Jul 3, 2020</div>
+		</div>
+		
+
+		<section class="body">
+			<p>The game I was working on (<a href="/posts/unexpected_orcs/">Unexpected Orcs</a>, sadly unfinished) used tile-based terrain, and in an effort to give it more visual appeal, my team and I thought &ldquo;wouldn&rsquo;t it be cool if we could give the walls a bit of perspective and have borders between different tile types&rdquo;.
+Of course, we weren&rsquo;t the first to think this and we almost certainly won&rsquo;t be the last. We did a bit of research and came across the technique of bitmasking tile textures, <a href="https://gamedevelopment.tutsplus.com/tutorials/how-to-use-tile-bitmasking-to-auto-tile-your-level-layouts--cms-25673">this article</a> was particularly helpful (I highly recommend reading that article first if you don&rsquo;t know what tile bitmasking is, it explains it much better than me and has pretty pictures. I do, however, give it a red hot go below if you don&rsquo;t want to read it).</p>
+<p>Tile bitmasking automates the laborious process of hand placing border tiles where one or more tile types comes together, or in our case, allows us to have borders at all on generated terrain. Unfortunately, to do tile bitmasking you need A LOT of textures for each type of tile, 48 to be exact. Due to this, we ended making a system that only needs two textures for each terrain type and can generate all the required tiles for us.</p>
+<p>This article will first go over what bitmasking is and how it applies to tiles and textures. Following that I will discuss our approach to it and how our tile texture generation works. I would suggest that now is the prefect time to go and make yourself a hot beverage as I tend to ramble on a tad.</p>
+<blockquote>
+<p><strong>Note:</strong> Many engines have this set up for you, usually under a name like &ldquo;auto-tiling&rdquo; so you might want to look into that! <em>Unexpected Orcs</em> uses a custom engine, so we had to implement it ourselves. Even if your engine supplies this feature for you, it might intrest you to know how it works under the hood!</p>
+</blockquote>
+<hr>
+<h1 id="what-is-bitmasking">What is bitmasking?</h1>
+<p>Bitmasking is fairly common technique used in the computing world and applies to much more than just tiled textures. The basic premise behind it is that you can store a group of binary values as a single value by using each storage bit individually. For example if you had a 4-bit integer, you could define the bits to be:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bit</strong></td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td><strong>Value</strong></td>
+<td>Boss room unlocked</td>
+<td>Mini-boss killed</td>
+<td>Chest opened</td>
+<td>Has key</td>
+</tr>
+</tbody>
+</table>
+<p>If the value of the integer was 12 (1100 in binary), it would show that the player has unlocked the boss room and killed the mini-boss but hasn&rsquo;t opened the chest or found the key. This is because the 3rd and 2nd bits are both 1 indicating TRUE while the 1st and 0th bits are 0, meaning FALSE.</p>
+<p>If you want to know the state of a single boolean, you can create a mask for the desired bit (a bitmask, this is where the name is from!) and perform a bit-wise AND on the value. For the example above, the mask for the mini-boss being killed would be 0100. When you bit-wise AND the state (1100) and the mask (0100) you are left with 0100, indicating that the mini-boss is dead. If you wanted to know whether or not the chest was open, you would use the mask 0010. 1100 bit-wise AND 0010 gives you 0000, therefore the chest is still closed.<br>
+Generating the mask is straight foward when using bit-shifting. Take a look at this psuedo code example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#75715e">// returns if the nth bit of value is on or off (starts from 0)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getBit</span>(<span style="color:#a6e22e">value</span>, <span style="color:#a6e22e">n</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// the &lt;&lt; operator is called a left shift
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// the value to the left of the operator is the one being shifted
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// the one to the right indicates by how much
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// eg. 5 &lt;&lt; 2 would return 20
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// this makes little sense until you look at the binary
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// 5 = 101, 20 = 10100. The 101 as been shifted left by 2 bits
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">mask</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#a6e22e">n</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">val</span> <span style="color:#f92672">&amp;</span> <span style="color:#a6e22e">mask</span>) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">state</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">6</span> <span style="color:#75715e">// 1100
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">getBit</span>(<span style="color:#a6e22e">state</span>, <span style="color:#ae81ff">2</span>) <span style="color:#75715e">// true, mini-boss is dead
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">getBit</span>(<span style="color:#a6e22e">state</span>, <span style="color:#ae81ff">1</span>) <span style="color:#75715e">// false, chest is NOT open
+</span></span></span></code></pre></div><hr>
+<h1 id="how-do-we-apply-it">How do we apply it</h1>
+<p>In order to place tiles with the correct border texture, we need to know what the surrounding tiles are and how they are placed. Each tile has eight neighbours (four directly adjacent and four on the diagonals) and we need to know whether or not each of those neighbours is the same tile type as the centre one or not. Sounds like the perfect application for bitmasking eh?</p>
+<p>Using an 8-bit number we can describe every possible combination of the surrounding eight neighbours, 1-bit per neighbour. We simply check each neighbour in turn and set its corresponding bit to be either 1 if it is the same as current tile, or 0 if it&rsquo;s not. What we are left with is a value (we will call this the bitmask even though it&rsquo;s not a bit-mask) maps directly to the shape of the border. Pretty simple!</p>
+<p>It was at about this point that I realised that something being simple defintely does not make it easy. We are left with 256 possible bitmask values! I don&rsquo;t know about you, but I defintely don&rsquo;t want to be drawing that many tiles per tile type! Thankfully there are multiple values that end up with the same border shape which whittles the number down to 48 unique tiles and this ican be improved further to 16 when you factor in rotations. Even so, that&rsquo;s a lot of tiles to draw (especially when you posses the artistc talent of a wet towel and need to keep updating your textures. I don&rsquo;t want to have to change 16 textures just because I improved the stone texture!).</p>
+<p>I quickly came to the conclusion that doing that by hand simply would not do. Time for more automation!</p>
+<hr>
+<h1 id="automatic-texture-creation">Automatic texture creation</h1>
+<p>I want to quickly preface this section by saying we managed to simplify this problem a lot by the fact that we only ever have flat borders between textures. A lot of the pixel art textures out there have have really nice transations between tile types. They&rsquo;ll have ripples where the ocean meets the land and tufts of grass where the dirt path winds through. Not only does this require art skills we don&rsquo;t have, it also drastically increases the complexity of generating these textures (it&rsquo;s something I&rsquo;d like to explore someday, but it&rsquo;s out of scope of what we&rsquo;re doing here).</p>
+<p>Now that&rsquo;s out of the way, let&rsquo;s jump in! As I alluded to earlier, there are only 16 border shapes when you ignore rotations so we need to create a mask for each of these shapes which you can see below:</p>
+<figure><img src="/bitmasking/bitmasks.png"/><figcaption>
+            <h4>Bitmasking border shapes</h4>
+        </figcaption>
+</figure>
+
+<p>For reference, we only use the black part, but it was kind of hard to tell what was going on so I added in the blue to make it a bit clearer. The blue mimicks the shape that the 3x3 area of tiles would make for any given mask to apply, ie you&rsquo;d use the third mask when there is only one tile that is the same type as the centre one adjacent to it. If you&rsquo;d like to see how I derived these shapes (yes, for some reason I decided to figure them out for myself instead of just googling it), you can download the spreadsheet I used <a href="/bitmasking/bitmasking.xlsx">here.</a></p>
+<p>How do we use these masks? I&rsquo;m glad you asked.</p>
+<ol>
+<li>Get the bitmask of a tile from the tile data</li>
+<li>Figure out which of the 16 border shapes we need</li>
+<li>Figure out how the shape needs to be rotated for the bitmask</li>
+<li>Rotate the border shape mask, colour it, and slap it over the top of the base texture</li>
+</ol>
+<p>The most difficult part of all this was figuring how all 256 possible bitmask values translated into the 16 shapes and their rotations. You had better believe that I made a big ol&rsquo; spreadsheet of every single bitmask to figure it out. I probably could have drawn all the tiles I&rsquo;d ever need in the time it took me to do it, but now that I&rsquo;ve done it, you don&rsquo;t have to.</p>
+<p>We could just create a map that points from the 256 values directly to a border shape and rotation to use but due to the way our game handles caching textures this was not optimal. Instead we opted for an intermediate step where we first reduce the bitmask to one of the 48 values we mentioned earlier (where we treat rotations of the same border mask as separate entites. Our textures are rotation-specific so we can&rsquo;t rotate the final texture, only the border mask can be rotated so we need to know the pre-rotation bitmask value).
+We then map these 48 values to a border shape and a rotation. Since we wanted some perspective, our walls need two textures each. To know which one we need to use we can use the bitmask to see if the tile directly below is the same type or not. All that&rsquo;s left to do is combine the border mask with the base texture and we are done!</p>
+<p>I&rsquo;m not sure how well all of that came across in text, so here is some psuedo code to fill in the gaps:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getTileTexture</span>(<span style="color:#a6e22e">tileType</span>, <span style="color:#a6e22e">bitmask</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 1st reduction to one of the 48 values
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">bitmask</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">bitmaskMap</span>.<span style="color:#a6e22e">get</span>(<span style="color:#a6e22e">bitmask</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">isCached</span>(<span style="color:#a6e22e">tileType</span>, <span style="color:#a6e22e">bitmask</span>)) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// don&#39;t generate if we&#39;ve already generated it
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">getCached</span>(<span style="color:#a6e22e">tileType</span>, <span style="color:#a6e22e">bitmask</span>)
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// the magic happens in here
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">texture</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">generateTexture</span>(<span style="color:#a6e22e">tileType</span>, <span style="color:#a6e22e">bitmask</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">texture</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">generateTexture</span>(<span style="color:#a6e22e">tileType</span>, <span style="color:#a6e22e">bitmask</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 2nd reduction into one of 16 values
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">borderMask</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">bitmaskImage</span>.<span style="color:#a6e22e">get</span>(<span style="color:#a6e22e">bitmask</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// get the border rotation
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">rotation</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">bitmaskRotation</span>.<span style="color:#a6e22e">get</span>(<span style="color:#a6e22e">bitmask</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// rotate and colour the border
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">borderMask</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">rotate</span>(<span style="color:#a6e22e">borderMask</span>, <span style="color:#a6e22e">rotation</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">borderMask</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">colour</span>(<span style="color:#a6e22e">borderMask</span>, <span style="color:#a6e22e">borderColour</span>(<span style="color:#a6e22e">tileType</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">baseTexture</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">getTexture</span>(<span style="color:#a6e22e">tileType</span>, <span style="color:#a6e22e">bottom</span><span style="color:#f92672">=</span><span style="color:#a6e22e">isBottom</span>(<span style="color:#a6e22e">bitmask</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// smack the borderMask over the top of the bas texture
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">texture</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">combine</span>(<span style="color:#a6e22e">baseTexture</span>, <span style="color:#a6e22e">borderMask</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">cache</span>(<span style="color:#a6e22e">texture</span>, <span style="color:#a6e22e">tileType</span>, <span style="color:#a6e22e">bitmask</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">texture</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
+<h1 id="conclusion">Conclusion</h1>
+<p>Bitmasking is a really great technique for a number of things and bitmasking the tile textures allows us to do some cool stuff and certianly helps break up repatative textures. Our solution was a tad on the clunky side but it got the job done and, if I ever implement this technique again I&rsquo;m sure I&rsquo;ll do a better job at it.<br>
+One of the hardest desicions to make was whether to generate all the textures before hand and save them or to generate them at runtime as they&rsquo;re needed. There are certainly pros and cons to both approaches. In our case, we were constantly tweaking the tile textures so it was simpler for us to have the generation done at run time rather than have to run the tile generation each time we updated the textures. The performance overhead is also pretty minimal, but if you were struggling for speed you might prefer to pre-generate the textures.</p>
+<p>If you have any questions, feel free to <a href="/contact/">get in touch</a>! I&rsquo;m more than happy to answer any questions you might have.</p>
+
+		</section>
+
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/game-dev">game-dev</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+	</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/BarneyWhiteman" title="GitHub"><i data-feather="github"></i></a><a class="soc" href="https://www.youtube.com/c/barneycodes" title="YouTube"><i data-feather="youtube"></i></a></div>
+  <div class="footer-info">
+    2022  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Unexpected Orcs - Barney</title><link rel="icon" type="image/png" href=icon.png /><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="A breif look at some of the techincal challenges that were overcome will developing this unfinished game with my cousins in 2019." />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="Unexpected Orcs" />
+<meta property="og:description" content="A breif look at some of the techincal challenges that were overcome will developing this unfinished game with my cousins in 2019." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://barneyw.net/posts/unexpected_orcs/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-02-06T18:12:01+10:00" />
+<meta property="article:modified_time" content="2020-02-06T18:12:01+10:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Unexpected Orcs"/>
+<meta name="twitter:description" content="A breif look at some of the techincal challenges that were overcome will developing this unfinished game with my cousins in 2019."/>
+<script src="https://barneyw.net/js/feather.min.js"></script>
+	
+	
+        <link href="https://barneyw.net/css/fonts.7fa06c2792c8589768ffcdaf014e4bfc7f2ccbfba059f8e87131158970c23ed3.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="https://barneyw.net/css/main.3dae439ff12a61f699102d9d30f83caa4d179f5226a63b4a5096642eb6b4dcfc.css" />
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="https://barneyw.net/">Barney</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/about">About</a>
+		
+		<a href="/posts">Posts</a>
+		
+		<a href="/youtube">YouTube</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/contact">Contact</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">Unexpected Orcs</h1>
+			<div class="meta">Posted on Feb 6, 2020</div>
+		</div>
+		
+
+		<section class="body">
+			<p>Unexpected Orcs is an unfinshed (and sadly abandoned) bullet-hell Action RPG with roguelike elements. It is the spiritual successor to the unreleased flash game of the same name created by the same team of me and my cousins (circa 2011).<br>
+The project is written in a custom Java engine that uses <a href="https://www.processing.org/">Processing</a> to handle the graphics side of things.<br>
+You can find the code for the project on <a href="https://github.com/Gorge-Studios/Unexpected-Orcs">GitHub</a>.</p>
+<p>Below are a few screenshots that I took over the course of development with a few brief notes sprinkled in for taste.</p>
+<blockquote>
+<p><strong>Note:</strong> The most recent pictures are in the screenshots section!</p>
+</blockquote>
+<hr>
+<h1 id="screenshots">Screenshots</h1>
+<p>Here are a few screenshots from the game as it currently stands. There are currently 5 dungeon types, all with very imaginative names.
+The first three are generated using a cellular automata approach whereas the Cellar and the Grass Dungeon both generated with more advanced custom dungeon generators (the generators are discussed more a bit later!)</p>
+<p><figure><img src="/unexpected-orcs/2020_01_28_Cave.PNG"/><figcaption>
+            <h4>The Cave</h4>
+        </figcaption>
+</figure>
+<br>
+<em>The Cave</em></p>
+<p><figure><img src="/unexpected-orcs/2020_01_28_Desert.PNG"/><figcaption>
+            <h4>The Desert</h4>
+        </figcaption>
+</figure>
+<br>
+<em>The Desert</em></p>
+<p><figure><img src="/unexpected-orcs/2020_01_28_Blood.PNG"/><figcaption>
+            <h4>The Blood Dungeon</h4>
+        </figcaption>
+</figure>
+<br>
+<em>The Blood Dungeon (but for some reason we made it purple not red&hellip;)</em></p>
+<p><figure><img src="/unexpected-orcs/2020_01_28_Cellar.PNG"/><figcaption>
+            <h4>The Cellar</h4>
+        </figcaption>
+</figure>
+<br>
+<em>The Cellar</em></p>
+<p><figure><img src="/unexpected-orcs/2020_01_28_GrassDungeon.PNG"/><figcaption>
+            <h4>The Grass Dungeon</h4>
+        </figcaption>
+</figure>
+<br>
+<em>The Grass Dungeon</em></p>
+<p>The cellular automata dungeons (Cave, Desert and Blood Dungeon) have the possibility to generate treasure rooms filled with XP and goodies!</p>
+<p><figure><img src="/unexpected-orcs/2020_01_28_Treasure.PNG"/><figcaption>
+            <h4>A treasure room in the cave</h4>
+        </figcaption>
+</figure>
+<br>
+<em>A treasure room in The Cave</em></p>
+<hr>
+<h1 id="development">Development</h1>
+<h2 id="initial-dungeon-generation">Initial dungeon generation</h2>
+<p>The first thing we worked on was getting some level generation started. We knew that there would be two main area types; &ldquo;Cave&rdquo; type levels and &ldquo;Dungeon&rdquo; type levels.<br>
+The cave type levels needed to be more open, allowing for better long range combat and freer movement and dodging. The dungeon type levels were made to be more restrictive, encouraging the player to get closer to enemies.</p>
+<p>The cave dungeons are all generated using a cellular automata approach. Basically what that means is that, initially, tiles in the map are randomly set to either be a WALL or FLOOR (black tiles and white tiles repspectively). Then, based on its surrounding tiles (and what the tile is itself), the tile is set to be either a wall or a floor in the next generation. The technique we used is heavily based on the approach outlined on <a href="http://www.roguebasin.com/index.php?title=Cellular_Automata_Method_for_Generating_Random_Cave-Like_Levels">roguebasin</a>, so definitely go and check that out.<br>
+There are a bunch of parameters to tweak with this technique so you can usually get the generator to give you levels with the feeling you are after.</p>
+<p>Later in development the cave generator was also given the ability to check for rooms that are separated from the main cave and, if they&rsquo;re the right size, turns them into treasure rooms (otherwise they get filled in).</p>
+<p><figure><img src="/unexpected-orcs/2018_11_09_Cave.png"/><figcaption>
+            <h4>Early cave generation</h4>
+        </figcaption>
+</figure>
+<br>
+<em>Example of early cave generator output</em></p>
+<p>For the dungeons we initially explored two different techniques, one of which is still used for the Grass Dungeon and I&rsquo;ll talk about it first. The basic premise behind it is to randomly place some rooms and then generate a maze in the space left. You then add doorways from each of the rooms into the maze and then remove all the dead-ends of the maze. This gives us a really nice, windy dungeon that is perfect for a hedge maze inspired level!<br>
+I found this technique on Bob Nystrom&rsquo;s brilliant <a href="https://journal.stuffwithstuff.com/2014/12/21/rooms-and-mazes/">website</a> (there are so many great articles on there!), so if you want to learn how this was done in more detail, go and have a look at that.</p>
+<p><figure><img src="/unexpected-orcs/2018_11_10_Dungeon.png"/><figcaption>
+            <h4>Early maze dungeon generation</h4>
+        </figcaption>
+</figure>
+<br>
+<em>Example of early maze dungeon generator output</em></p>
+<p>While perfectly suited to an organicly styled level, we knew that those extra-windy corridors would not suit a dungeon that was supposed to have been built as apposed to an organic structure. As such we made our own rudimentry &ldquo;hand-made&rdquo; dungeon generator.
+The basic premise behnid this was to randomly place some rooms like before, but then instead of creating a maze between them, just randomly connect them together with &ldquo;L&rdquo; shaped corridors. This lead to an okay (ish) dungeon, but one with a lot things that didn&rsquo;t make sense. We knew we&rsquo;d have to come back to this one to fix it up (keep reading to find out about that!), but it was more than enough to get the project underway.</p>
+<p><figure><img src="/unexpected-orcs/2018_11_10_Dungeon1.png"/><figcaption>
+            <h4>Early hand made dungeon generation</h4>
+        </figcaption>
+</figure>
+<br>
+<em>Example of early hand made dungeon generator output</em></p>
+<hr>
+<h2 id="tile-textures">Tile textures</h2>
+<p>While making the generators I got pretty sick of looking at black and white squares all the time, so we figured it was time for an upgrade. None of us are particularly artisticly inclined (being a group of three programmers, this is hardly surprising!), however we started cobbling together some okay looking pixel art.</p>
+<p>Our first attempts left a bit to be desired. As you can see here, the colours are a bit off (the floor is basically red and the walls were far too green) and it all just looked a bit flat.</p>
+<p><figure><img src="/unexpected-orcs/2018_11_10_Dungeon2_textures.png"/><figcaption>
+            <h4>First dungeon tiles</h4>
+        </figcaption>
+</figure>
+<br>
+<em>Our first dungeon tiles</em></p>
+<p>To combat this, we gave the wall tiles some dimension and worked on balancing the colours better to make a more cohesive scene. You can see in these next screenshots just how effective adding some shading to the wall tiles can be. To achieve this effect, we had to check if the wall tiles were on the &ldquo;bottom&rdquo; (has a floor tile below it) and assign the sprites accordingly.</p>
+<p><figure><img src="/unexpected-orcs/2018_11_10_textures_cave.png"/><figcaption>
+            <h4>Improved cave tiles</h4>
+        </figcaption>
+</figure>
+<br>
+<em>Improved cave tiles</em></p>
+<p><figure><img src="/unexpected-orcs/2018_11_11_Dungeon_textures.png"/><figcaption>
+            <h4>Improved dungeon tiles</h4>
+        </figcaption>
+</figure>
+<br>
+<em>Our first dungeon tiles</em></p>
+<p>While this drastically improved the overall look of the levels, it still wasn&rsquo;t quite enough. To help better define the walls, we started doing some very basic texture bitmasking, which is essentially an upgraded version of what we were doing by checking for wall tiles being on the &ldquo;bottom&rdquo;.<br>
+Bitmasking tile textures means checking a tiles neighbours to figure out which ones are of the same type, and assigning a texture based on the pattern. There is a really great tutorial for this over <a href="https://gamedevelopment.tutsplus.com/tutorials/how-to-use-tile-bitmasking-to-auto-tile-your-level-layouts--cms-25673">here</a> so take a look at that if you&rsquo;re interested.</p>
+<p>First we implemented the simple version: only check the tiles in the four cardinal directions (no diagonals), meaning there are 16 textures to make per wall type. As you can see when comparing the images below between the simple and final version, this leaves little gaps on the inside corners of wall tiles.</p>
+<p><figure><img src="/unexpected-orcs/bitmasking_basic.PNG"/><figcaption>
+            <h4>Simple bitmasking</h4>
+        </figcaption>
+</figure>
+<br>
+<em>Simple bitmasking, not checking diagonals</em></p>
+<p><figure><img src="/unexpected-orcs/bitmasking_advanced.PNG"/><figcaption>
+            <h4>Final bitmasking</h4>
+        </figcaption>
+</figure>
+<br>
+<em>Final bitmaksing, checking the diagonals</em></p>
+<p>We fixed this by implementing a system that is able to generate the bitmasked textures on the fly, which massively simplifies adding and modifying tile textures. Because this new system makes it so easy we were able to make the bitmasking now check the tiles diagonally adjacent too it as well, fixing the issue with the corners. We also decided to add the bitmasking to the floor tiles as well, which you can see in the image below.</p>
+<p><figure><img src="/unexpected-orcs/bitmasking_advanced2.PNG"/><figcaption>
+            <h4>Final bitmasking</h4>
+        </figcaption>
+</figure>
+<br>
+<em>Final bitmaksing, checking the diagonals</em></p>
+<hr>
+<h2 id="gui">GUI</h2>
+<p>Once we had some nice looking tiles, we needed some way to see all the character&rsquo;s stats and inventory on the screen.
+Below on the left, you can see a little mockup that we made and on the right you can see an early version of the GUI with basic health and mana bars as well as a very basic inventory.</p>
+<figure><img src="/unexpected-orcs/2018_11_22_GUI_mock2.png"/><figcaption>
+            <h4>Very bad GUI mockup</h4>
+        </figcaption>
+</figure>
+
+<figure><img src="/unexpected-orcs/2018_11_23_Inventory1.png"/><figcaption>
+            <h4>First GUI implementation</h4>
+        </figcaption>
+</figure>
+
+<p>The final GUI matched fairly closely with what we had planned it to be, the main differences are the lack of XP bar and the map position changing. We changed the XP bar for two reasons. Firstly, we ended up making each stat level up individually so we gave each stat its own mini level up bar. Secondly, we needed a bit of room for some extra GUI elements that were not always present, namely item bag inventories and portal entry buttons.</p>
+<figure><img src="/unexpected-orcs/2019_02_1_GUI.PNG"/><figcaption>
+            <h4>Final GUI implementation</h4>
+        </figcaption>
+</figure>
+
+<p>We also custom built a menu UI system that has a fair bit of functionality (as you can see, the title is currently being workshopped since, let&rsquo;s face it, Unexpected Orcs sounds like a bunch of 12 year olds came up with it when creating a Lord of the Rings inspired flash game in 2011!)</p>
+<figure><img src="/unexpected-orcs/2020_01_28_Title.PNG"/><figcaption>
+            <h4>Title screen</h4>
+        </figcaption>
+</figure>
+
+<p>While the game has perma-death, you don&rsquo;t have to play a run all at once, you are able to save the progress of your characters and load them back in at a later time. If you want a real challenge, there is the more hard-core &ldquo;guest mode&rdquo; where you can&rsquo;t save. And of course there is a settings menu to change all the basic things like controls, sounds, graphics etc.</p>
+<figure><img src="/unexpected-orcs/2020_01_28_Load.PNG"/><figcaption>
+            <h4>Load game screen</h4>
+        </figcaption>
+</figure>
+
+<figure><img src="/unexpected-orcs/2020_01_28_Settings.PNG"/><figcaption>
+            <h4>Settings screen</h4>
+        </figcaption>
+</figure>
+
+<p>All of the UI controls seen here made from scratch. We made everything from the buttons to the scroll boxes to the tabs by hand!</p>
+<hr>
+<h2 id="dungeon-generation-revisited">Dungeon generation revisited</h2>
+<p>As I mentioned before, we needed an upgrade for the &ldquo;hand-made&rdquo; dungeons. This generator has quite a bit going on under the hood so I won&rsquo;t go into detail here, however these next three images show some of the steps taken during the dungeon generation.</p>
+<figure><img src="/unexpected-orcs/LevelGraph.png"/><figcaption>
+            <h4>Step 1: Level graph</h4>
+        </figcaption>
+</figure>
+
+<figure><img src="/unexpected-orcs/LevelMap.png"/><figcaption>
+            <h4>Step 2: Level graph with corridors laid out</h4>
+        </figcaption>
+</figure>
+
+<figure><img src="/unexpected-orcs/imageCellar.png"/><figcaption>
+            <h4>Step 3: Final dungeon</h4>
+        </figcaption>
+</figure>
+
+<p>If you want to learn all the nitty-gritty details, I made a separate post that goes a lot further in depth <a href="/posts/dungeon_generation">here</a>.</p>
+<p>The general gist of it is that you give the generator a bunch of room pre-fabs (including a spawn room and a boss room), and it will randomly place them down and path find between connected rooms to connect the corridors.</p>
+<hr>
+<h1 id="conclusion">Conclusion</h1>
+<p>If you made it this far, thank you so much! That&rsquo;s all for the moment, I hope this page gave you a bit of insight into what goes into making even a fairly simple game like this (admittedly made harder by making almost everything from scratch). This is by no means an exhuastive collection of all the systems the game uses, I haven&rsquo;t touched anything to do with items, enemies, or any gameplay (this is mainly because I wasn&rsquo;t as heavily involved with that stuff).</p>
+<p>If I were to make this game again, there would absolutely be a lot of things that I would have done differently, however I learnt <em>a lot</em> while making this. I really found the hands-on aspect of making everything from scratch rewarding and I will definitely be doing it again in the future.</p>
+<p>As for why the project got abandoned, my cousins and I did the bulk of development during our uni summer break. We had loads of time so we kept up quite a bit of momentum. This dwindled drastically once we all started classes again and then final ground to a halt. We may have finished it if we&rsquo;d had more time, but honestly the amount of feature creep we had was quite impressive so who knows?<br>
+I would do it all again in a heart beat.</p>
+<p>If there is anything you&rsquo;d like to know more about or if you have any questions, feel free to <a href="/contact">get in touch</a>!</p>
+<hr>
+
+		</section>
+
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/project">project</a></li>
+					
+					<li><a href="/tags/game-dev">game-dev</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+	</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/BarneyWhiteman" title="GitHub"><i data-feather="github"></i></a><a class="soc" href="https://www.youtube.com/c/barneycodes" title="YouTube"><i data-feather="youtube"></i></a></div>
+  <div class="footer-info">
+    2022  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

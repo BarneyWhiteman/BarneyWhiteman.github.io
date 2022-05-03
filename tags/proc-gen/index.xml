@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>proc-gen on Barney</title>
+    <link>https://barneyw.net/tags/proc-gen/</link>
+    <description>Recent content in proc-gen on Barney</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 03 Jun 2020 22:57:21 +1000</lastBuildDate><atom:link href="https://barneyw.net/tags/proc-gen/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dungeon Generation</title>
+      <link>https://barneyw.net/posts/dungeon_generation/</link>
+      <pubDate>Wed, 03 Jun 2020 22:57:21 +1000</pubDate>
+      
+      <guid>https://barneyw.net/posts/dungeon_generation/</guid>
+      <description>While creating the game Unexpect Orcs, we needed a way to generate the dungeon levels. We had a look at some existing methods, for example Bob Nystrom&amp;rsquo;s brilliant method where he connects rooms with mazes.
+For the most part we found that, while these generators were good, they didn&amp;rsquo;t really suit what we were after, We wanted to keep the rooms of our dungeons separated by corridors to keep that cramped feeling, but it didn&amp;rsquo;t make sense to use that whoever was building these dungeons would make the routes between rooms so indirect, so we decided to address that and make our own generator!</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>game-dev on Barney</title>
+    <link>https://barneyw.net/tags/game-dev/</link>
+    <description>Recent content in game-dev on Barney</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 03 Jul 2020 18:34:21 +1000</lastBuildDate><atom:link href="https://barneyw.net/tags/game-dev/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bitmasking</title>
+      <link>https://barneyw.net/posts/bitmasking/</link>
+      <pubDate>Fri, 03 Jul 2020 18:34:21 +1000</pubDate>
+      
+      <guid>https://barneyw.net/posts/bitmasking/</guid>
+      <description>The game I was working on (Unexpected Orcs, sadly unfinished) used tile-based terrain, and in an effort to give it more visual appeal, my team and I thought &amp;ldquo;wouldn&amp;rsquo;t it be cool if we could give the walls a bit of perspective and have borders between different tile types&amp;rdquo;. Of course, we weren&amp;rsquo;t the first to think this and we almost certainly won&amp;rsquo;t be the last. We did a bit of research and came across the technique of bitmasking tile textures, this article was particularly helpful (I highly recommend reading that article first if you don&amp;rsquo;t know what tile bitmasking is, it explains it much better than me and has pretty pictures.</description>
+    </item>
+    
+    <item>
+      <title>Dungeon Generation</title>
+      <link>https://barneyw.net/posts/dungeon_generation/</link>
+      <pubDate>Wed, 03 Jun 2020 22:57:21 +1000</pubDate>
+      
+      <guid>https://barneyw.net/posts/dungeon_generation/</guid>
+      <description>While creating the game Unexpect Orcs, we needed a way to generate the dungeon levels. We had a look at some existing methods, for example Bob Nystrom&amp;rsquo;s brilliant method where he connects rooms with mazes.
+For the most part we found that, while these generators were good, they didn&amp;rsquo;t really suit what we were after, We wanted to keep the rooms of our dungeons separated by corridors to keep that cramped feeling, but it didn&amp;rsquo;t make sense to use that whoever was building these dungeons would make the routes between rooms so indirect, so we decided to address that and make our own generator!</description>
+    </item>
+    
+    <item>
+      <title>Unexpected Orcs</title>
+      <link>https://barneyw.net/posts/unexpected_orcs/</link>
+      <pubDate>Thu, 06 Feb 2020 18:12:01 +1000</pubDate>
+      
+      <guid>https://barneyw.net/posts/unexpected_orcs/</guid>
+      <description>Unexpected Orcs is an unfinshed (and sadly abandoned) bullet-hell Action RPG with roguelike elements. It is the spiritual successor to the unreleased flash game of the same name created by the same team of me and my cousins (circa 2011).
+The project is written in a custom Java engine that uses Processing to handle the graphics side of things.
+You can find the code for the project on GitHub.
+Below are a few screenshots that I took over the course of development with a few brief notes sprinkled in for taste.</description>
+    </item>
+    
+  </channel>
+</rss>
