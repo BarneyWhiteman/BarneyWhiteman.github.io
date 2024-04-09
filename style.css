@@ -1,0 +1,22 @@
+@font-face {
+	font-family: barneycodes;
+	src: url("ProtestStrike-Regular.ttf");
+}
+
+
+body {
+    max-width: 50%;
+    margin: auto;
+    margin-top: 50px;
+
+	line-height: 1.4;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: barneycodes;
+}

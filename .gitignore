@@ -1,4 +1,1 @@
-Server/node_modules/
-data/*.json
-ddb/Server/node_modules/
-DDB-Server/node_modules/
+*.DS_Store
