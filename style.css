@@ -12,11 +12,29 @@ body {
 	line-height: 1.4;
 }
 
+img {
+    max-width: 50%;
+    max-height: 50%;
+}
+
+h1 {
+    font-size: 3em
+}
+
 h1,
 h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+.fancy {
     font-family: barneycodes;
+}
+
+a:link {
+    color: rgb(253, 130, 93)
+}
+
+a:visited {
+    color: rgb(217, 84, 74)
 }
