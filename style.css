@@ -1,6 +1,6 @@
 @font-face {
 	font-family: barneycodes;
-	src: url("ProtestStrike-Regular.ttf");
+	src: url("fonts/ConcertOne-Regular.ttf");
 }
 
 
@@ -10,6 +10,7 @@ body {
     margin-top: 50px;
 
 	line-height: 1.4;
+    font-family: sans-serif;
 }
 
 img {
@@ -32,9 +33,9 @@ h6,
 }
 
 a:link {
-    color: rgb(253, 130, 93)
+    color: #EE9C5D
 }
 
 a:visited {
-    color: rgb(217, 84, 74)
+    color: #C6505A
 }
